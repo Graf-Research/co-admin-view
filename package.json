@@ -25,7 +25,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "rollup": "rollup -c --bundleConfigAsCjs"
+    "rollup": "rollup -c --bundleConfigAsCjs",
+    "build-lib": "npm run rollup && cp ./package.json dist && npx tar.gz c dist dist.tar.gz"
   },
   "eslintConfig": {
     "extends": [
