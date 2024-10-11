@@ -1,7 +1,6 @@
 {
   "name": "co-admin-view",
-  "version": "1.0.0",
-  "private": true,
+  "version": "1.0.0-patch6",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
@@ -25,8 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "rollup": "rollup -c --bundleConfigAsCjs",
-    "build-lib": "npm run rollup && cp ./package.json dist && npx tar.gz c dist co-admin-view@1.0.0.tar.gz"
+    "rollup": "rollup -c --bundleConfigAsCjs"
   },
   "eslintConfig": {
     "extends": [

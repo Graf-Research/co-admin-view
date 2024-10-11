@@ -8,6 +8,7 @@ import { InputOptionModal } from "./components/general/input/InputOptionModal";
 import { TableActionTD } from "./components/general/TableActionTD";
 import { DataType, FieldDataType, FilterParam, OptionItem, PaginatedData, SupportedDataType, TableColumn, TableColumnOptionFilter, TableField } from "./types";
 import { FormModal } from "./components/form/FormModal";
+import './index.css';
 
 export interface PageProps<T extends DataType, U extends FieldDataType> {
   columns: TableColumn[]
