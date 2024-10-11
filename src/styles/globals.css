@@ -2,26 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+html, body {
+  font-size: .88em;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+table.t1 {
+  width: 100%;
 }
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+table.t1 > thead {
+  white-space: nowrap;
 }
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+table.t1 > thead > tr {
+  padding: 4px 10px;
+}
+table.t1 > thead > tr > th {
+  padding: 4px 10px;
+  background-color: #3F84F122;
+  text-align: left;
+}
+table.t1 > thead > tr > th {
+  border-right: solid 1px #DDD;
+}
+table.t1 > thead > tr > th:last-child {
+  border-right: none;
+}
+table.t1 > tbody > tr {
+  border-top: solid 1px #CCC;
+}
+table.t1 > tbody > tr > td {
+  padding: 4px 10px;
+  border-right: solid 1px #DDD;
+}
+table.t1 > tbody > tr.filter > td {
+  padding: 4px 4px;
+}
+table.t1 > tbody > tr > td:last-child {
+  border-right: none;
+}
+table.t1 > tbody > tr:nth-child(even) {
+  background-color: #FAFAFA;
+}
+table.t1 > tbody > tr:hover {
+  background-color: #F0F0F0;
 }
