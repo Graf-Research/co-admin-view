@@ -9,6 +9,7 @@ import { TableActionTD } from "./components/general/TableActionTD";
 import { DataType, FieldDataType, FilterParam, OptionItem, PaginatedData, SupportedDataType, TableColumn, TableColumnOptionFilter, TableField } from "./types";
 import { FormModal } from "./components/form/FormModal";
 import './index.css';
+import { deepAccess } from "./components/utility";
 
 export interface PageProps<T extends DataType, U extends FieldDataType> {
   columns: TableColumn[]
@@ -67,7 +68,7 @@ export function Page<T extends DataType, U extends FieldDataType>(props: PagePro
   }
 
   async function deleteData(row: T) {
-    if (confirm(`Hapus data ${props.deleteDataLabel ? props.deleteDataLabel(row) : 'ini'}?`)) {
+    if (window.confirm(`Hapus data ${props.deleteDataLabel ? props.deleteDataLabel(row) : 'ini'}?`)) {
       if (props.onDelete) {
         await props.onDelete(row);
         getData();
@@ -129,7 +130,7 @@ export function Page<T extends DataType, U extends FieldDataType>(props: PagePro
                             setFilter({ ...filter, [tc.key]: e.target.value as any });
                           }}
                           onKeyUp={(e: any) => e.key === 'Enter' && getData()}
-                          placeholder={'ID'} />
+                          placeholder={tc.label} />
                       </td>
                     );
                     case "option-filter": 
@@ -155,16 +156,17 @@ export function Page<T extends DataType, U extends FieldDataType>(props: PagePro
                 <tr key={i}>
                   {
                     props.columns.map((tc: TableColumn, j: number) => {
+                      const value = deepAccess(row, tc.key);
                       switch (tc.kind) {
                         case "basic": 
                         case "string-filter": return (
                           <td key={`${i}-${j}`}>
-                            { row[tc.key] }
+                            { value }
                           </td>
                         );
                         case "option-filter": return (
                           <td key={`${i}-${j}`}>
-                            { list_options[tc.key].find((o: OptionItem) => o.value == row[tc.key])?.label }
+                            { list_options[tc.key].find((o: OptionItem) => o.value == value)?.label }
                           </td>
                         );
                       }

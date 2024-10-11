@@ -1,6 +1,6 @@
 {
   "name": "co-admin-view",
-  "version": "1.0.0-patch6",
+  "version": "1.0.1",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",

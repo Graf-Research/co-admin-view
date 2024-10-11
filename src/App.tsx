@@ -6,7 +6,9 @@ import { Page } from './Page';
 interface MyItemType extends DataType {
   id: number
   id_lokasi: number
-  fullname: string
+  user: {
+    name: string
+  }
 }
 interface MyFieldType extends FieldDataType {
   id?: number
@@ -18,35 +20,51 @@ export default function() {
   const list_data = useRef<MyItemType[]>([{
     id: 1,
     id_lokasi: 1,
-    fullname: 'testing1',
+    user: {
+      name: 'testing1'
+    },
   }, {
     id: 2,
     id_lokasi: 3,
-    fullname: 'testing2',
+    user: {
+      name: 'testing2'
+    },
   }, {
     id: 3,
     id_lokasi: 2,
-    fullname: 'testing3',
+    user: {
+      name: 'testing3'
+    },
   }, {
     id: 5,
     id_lokasi: 1,
-    fullname: 'testing5',
+    user: {
+      name: 'testing5'
+    },
   }, {
     id: 7,
     id_lokasi: 1,
-    fullname: 'testing7',
+    user: {
+      name: 'testing7'
+    },
   }, {
     id: 10,
     id_lokasi: 3,
-    fullname: 'testing10',
+    user: {
+      name: 'testing10'
+    },
   }, {
     id: 15,
     id_lokasi: 2,
-    fullname: 'testing15',
+    user: {
+      name: 'testing15'
+    },
   }, {
     id: 23,
     id_lokasi: 1,
-    fullname: 'testing23',
+    user: {
+      name: 'testing23'
+    },
   }].reverse());
 
   const options_lokasi: OptionItem[] = [{
@@ -68,7 +86,7 @@ export default function() {
   }, {
     kind: 'string-filter',
     label: 'Nama',
-    key: 'fullname',
+    key: 'user.name',
     type: 'string'
   }, {
     kind: 'option-filter',
@@ -96,6 +114,10 @@ export default function() {
       total: list_data.current.length,
       data: list_data.current.slice(offset, offset + limit).filter(row => {
         let ok = true;
+
+        if (param.fullname) {
+          ok &&= row.user.name.includes(param.fullname as string);
+        }
 
         if (param.id) {
           ok &&= row.id == param.id;
@@ -127,7 +149,9 @@ export default function() {
       list_data.current = [
         {
           id_lokasi: form.id_lokasi,
-          fullname: form.name,
+          user: {
+            name: form.name
+          },
           id: new Date().getTime()
         },
         ...list_data.current
@@ -144,11 +168,11 @@ export default function() {
     getData={getData}
     columns={table_columns}
     onDelete={deleteData}
-    deleteDataLabel={r => r.fullname}
+    deleteDataLabel={r => r.user.name}
     form={{
       title: 'Data',
       fields: table_fields,
-      mapRowToFields: (row: MyItemType) => ({ id: row.id, id_lokasi: row.id_lokasi, name: row.fullname }),
+      mapRowToFields: (row: MyItemType) => ({ id: row.id, id_lokasi: row.id_lokasi, name: row.user.name }),
       onSubmit: submitData
     }} />
 }

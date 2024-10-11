@@ -5,7 +5,7 @@ export interface OptionItem {
   value: SupportedDataType
 }
 
-export type DataType = {[key: string]: SupportedDataType}
+export type DataType = {[key: string]: SupportedDataType | DataType}
 
 export type FieldDataType = {[key: string]: SupportedDataType | undefined}
 
