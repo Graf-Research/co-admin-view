@@ -1,46 +1,184 @@
-# Getting Started with Create React App
+# Co-Admin View
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Create easy Admin CRUD view in no time.
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+Install dependency
+```bash
+npm install --save co-admin-view
+```
 
-### `npm start`
+Update Tailwind config file
+```js
+const config: Config = {
+  ...,
+  content: [
+    ...,
+    "./node_modules/co-admin-view/**/*.{js,ts,jsx,tsx,mdx}"
+  ],
+  ...
+};
+export default config;
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Example Usage
 
-### `npm test`
+```typescript
+import React from 'react';
+import { useRef } from "react";
+import { DataType, FieldDataType, FilterParam, OptionItem, PaginatedData, TableColumn, TableField } from 'co-admin-view';
+import { Page } from 'co-admin-view';
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+interface MyItemType extends DataType {
+  id: number
+  id_lokasi: number
+  fullname: string
+}
+interface MyFieldType extends FieldDataType {
+  id?: number
+  id_lokasi: number
+  name: string
+}
 
-### `npm run build`
+export default function() {
+  const list_data = useRef<MyItemType[]>([{
+    id: 1,
+    id_lokasi: 1,
+    fullname: 'testing1',
+  }, {
+    id: 2,
+    id_lokasi: 3,
+    fullname: 'testing2',
+  }, {
+    id: 3,
+    id_lokasi: 2,
+    fullname: 'testing3',
+  }, {
+    id: 5,
+    id_lokasi: 1,
+    fullname: 'testing5',
+  }, {
+    id: 7,
+    id_lokasi: 1,
+    fullname: 'testing7',
+  }, {
+    id: 10,
+    id_lokasi: 3,
+    fullname: 'testing10',
+  }, {
+    id: 15,
+    id_lokasi: 2,
+    fullname: 'testing15',
+  }, {
+    id: 23,
+    id_lokasi: 1,
+    fullname: 'testing23',
+  }].reverse());
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  const options_lokasi: OptionItem[] = [{
+    label: 'Jakarta',
+    value: 1
+  }, {
+    label: 'Bandung',
+    value: 2
+  }, {
+    label: 'Semarang',
+    value: 3
+  }];
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  const table_columns: TableColumn[] = [{
+    kind: 'string-filter',
+    label: 'ID',
+    key: 'id',
+    type: 'number'
+  }, {
+    kind: 'string-filter',
+    label: 'Nama',
+    key: 'fullname',
+    type: 'string'
+  }, {
+    kind: 'option-filter',
+    label: 'Lokasi',
+    key: 'id_lokasi',
+    type: 'number',
+    options: options_lokasi
+  }];
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  const table_fields: TableField[] = [{
+    kind: 'string',
+    label: 'Nama',
+    key: 'name'
+  }, {
+    kind: 'option',
+    label: 'Lokasi',
+    key: 'id_lokasi',
+    type: 'number',
+    options: options_lokasi
+  }];
 
-### `npm run eject`
+  async function getData(limit: number, offset: number, param: FilterParam): Promise<PaginatedData<any>> {
+    await new Promise(resolve => setTimeout(resolve, 200));
+    return {
+      total: list_data.current.length,
+      data: list_data.current.slice(offset, offset + limit).filter(row => {
+        let ok = true;
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+        if (param.id) {
+          ok &&= row.id == param.id;
+        }
+        
+        if (param.id_lokasi && Array.isArray(param.id_lokasi) && param.id_lokasi.length > 0) {
+          ok &&= param.id_lokasi.includes(row.id_lokasi);
+        }
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+        return ok;
+      })
+    }
+  }
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  async function submitData(form: MyFieldType) {
+    await new Promise(resolve => setTimeout(resolve, 200));
+    if (form.id) {
+      list_data.current = list_data.current.map(r => {
+        if (r.id == form.id) {
+          return {
+            ...r,
+            id_lokasi: form.id_lokasi,
+            fullname: form.name
+          };
+        }
+        return r;
+      });
+    } else {
+      list_data.current = [
+        {
+          id_lokasi: form.id_lokasi,
+          fullname: form.name,
+          id: new Date().getTime()
+        },
+        ...list_data.current
+      ];
+    }
+  }
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  async function deleteData(item: MyItemType) {
+    await new Promise(resolve => setTimeout(resolve, 200));
+    list_data.current = list_data.current.filter(r => r.id != item.id);
+  }
 
-## Learn More
+  return <Page<MyItemType, MyFieldType>
+    getData={getData}
+    columns={table_columns}
+    onDelete={deleteData}
+    deleteDataLabel={r => r.fullname}
+    form={{
+      title: 'Data',
+      fields: table_fields,
+      mapRowToFields: (row: MyItemType) => ({ id: row.id, id_lokasi: row.id_lokasi, name: row.fullname }),
+      onSubmit: submitData
+    }} />
+}
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
