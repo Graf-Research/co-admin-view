@@ -10,7 +10,6 @@ function deepAccessExec(obj: DataType, keys: string[]): SupportedDataType | unde
   }
 
   const current_key = keys[0];
-  console.log('ck', current_key, obj);
   const value: SupportedDataType | DataType | undefined = obj[current_key];
   if (keys.length === 1) {
     return value as SupportedDataType | undefined;

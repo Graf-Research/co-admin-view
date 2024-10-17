@@ -88,7 +88,7 @@ export function Page<T extends DataType, U extends FieldDataType>(props: PagePro
     <div className={`p-[12px] flex flex-col gap-[12px]`}>
       { props.form && <Button
         onClick={() => {
-          setFormData(props.form!.fields.reduce((acc: U, tf: TableField) => ({ ...acc, [tf.key]: '' }), {} as U));
+          setFormData(props.form!.fields.reduce((acc: U, tf: TableField) => ({ ...acc, [tf.key]: tf.array ? [] : '' }), {} as U));
           setSelected(undefined);
           form_modal.current?.open();
         }}

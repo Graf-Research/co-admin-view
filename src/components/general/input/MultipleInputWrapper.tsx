@@ -1,9 +1,10 @@
 import { Button } from "../Button";
+import { img_delete } from "../TableActionTD";
 
 interface MultipleInputWrapperProps<T> {
   data: T[]
   setData(data: T[]): void
-  renderItem(value: T, onValueChange: (t: Partial<T>) => void, i: number): JSX.Element
+  renderItem(value: T, onValueChange: (t: Partial<T> | T) => void, i: number): JSX.Element
   newItemValue: T
   prefixTitle?: string
   v2?: boolean
@@ -33,7 +34,7 @@ export function MultipleInputWrapper<T>(props: MultipleInputWrapperProps<T>) {
   }
 
   function removeItem(i: number) {
-    if (!confirm(`Hapus item ${getTitle(i)}?`)) {
+    if (!window.confirm(`Hapus item ${getTitle(i)}?`)) {
       return;
     }
     props.setData([
@@ -67,7 +68,7 @@ export function MultipleInputWrapper<T>(props: MultipleInputWrapperProps<T>) {
                   removeItem(i);
                 }}
                 className={`z-[99] absolute right-[12px] top-[12px] cursor-pointer w-[17px] h-[17px] object-contain`}
-                src={'/delete.svg'} />
+                src={img_delete} />
               { props.renderItem(value, (t: Partial<T>) => updateItem(value, t, i), i) }
             </div>
           ))
@@ -89,15 +90,17 @@ export function MultipleInputWrapper<T>(props: MultipleInputWrapperProps<T>) {
           props.data.map((value: T, i: number) => (
             <div 
               key={i}
-              className={`relative flex items-center`}>
+              className={`relative flex gap-[12px]`}>
+              <div className={`flex-1`}>
+                { props.renderItem(value, (t: Partial<T>) => updateItem(value, t, i), i) }
+              </div>
               <img 
                 onClick={e => {
                   e.stopPropagation();
                   removeItem(i);
                 }}
-                className={`z-[99] absolute right-[12px] cursor-pointer w-[17px] h-[17px] object-contain`}
-                src={'/delete.svg'} />
-              { props.renderItem(value, (t: Partial<T>) => updateItem(value, t, i), i) }
+                className={`absolute cursor-pointer w-[20px] h-[20px] object-contain right-[0px] mt-[2px]`}
+                src={img_delete} />
             </div>
           ))
         }
@@ -132,7 +135,7 @@ export function MultipleInputWrapper<T>(props: MultipleInputWrapperProps<T>) {
             <img 
               onClick={() => removeItem(i)}
               className={`cursor-pointer w-[17px] h-[17px] object-contain`}
-              src={'/delete.svg'} />
+              src={img_delete} />
           </div>
         ))
       }

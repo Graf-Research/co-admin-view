@@ -14,6 +14,11 @@ interface MyFieldType extends FieldDataType {
   id?: number
   id_lokasi: number
   name: string
+  tags: string[]
+  data_alamat: {
+    alamat: string
+    id_lokasi: number
+  }[]
 }
 
 export default function() {
@@ -99,13 +104,62 @@ export default function() {
   const table_fields: TableField[] = [{
     kind: 'string',
     label: 'Nama',
-    key: 'name'
+    key: 'name',
+  }, {
+    kind: 'string',
+    label: 'Tags',
+    key: 'tags',
+    array: true
   }, {
     kind: 'option',
     label: 'Lokasi',
     key: 'id_lokasi',
     type: 'number',
     options: options_lokasi
+  }, {
+    kind: 'object',
+    label: 'User Address',
+    key: 'data_alamat',
+    array: true,
+    fields: [{
+      kind: 'string',
+      label: 'Alamat',
+      key: 'alamat'
+    }, {
+      kind: 'option',
+      label: 'Lokasi X',
+      key: 'id_lokasi',
+      type: 'number',
+      options: options_lokasi
+    }]
+  }, {
+    kind: 'custom',
+    label: 'Input Special Radio',
+    key: 'rx',
+    view(value: any, onValueChange: (v: any) => void) {
+      return <div className={`flex flex-col`}>
+        <div className={`flex items-center gap-[12px]`}>
+          <input 
+            onClick={() => onValueChange('on')}
+            checked={value == 'on'}
+            type={'radio'} 
+            value={'on'} />
+          <div>
+            On
+          </div>
+        </div>
+        <div className={`flex items-center gap-[12px]`}>
+          <input 
+            onClick={() => onValueChange('off')}
+            checked={value == 'off'}
+            type={'radio'} 
+            value={'off'} />
+          <div>
+            Off
+          </div>
+        </div>
+      </div>
+    },
   }];
 
   async function getData(limit: number, offset: number, param: FilterParam): Promise<PaginatedData<any>> {
@@ -172,7 +226,7 @@ export default function() {
     form={{
       title: 'Data',
       fields: table_fields,
-      mapRowToFields: (row: MyItemType) => ({ id: row.id, id_lokasi: row.id_lokasi, name: row.user.name }),
+      mapRowToFields: (row: MyItemType) => ({ id: row.id, id_lokasi: row.id_lokasi, name: row.user.name, tags: [], data_alamat: [] }),
       onSubmit: submitData
     }} />
 }
