@@ -138,7 +138,7 @@ export default function() {
     key: 'rx',
     view(value: any, onValueChange: (v: any) => void) {
       return <div className={`flex flex-col`}>
-        <div className={`flex items-center gap-[12px]`}>
+        <div className={`flex items-center gap-[8px]`}>
           <input 
             onClick={() => onValueChange('on')}
             checked={value == 'on'}
@@ -148,7 +148,7 @@ export default function() {
             On
           </div>
         </div>
-        <div className={`flex items-center gap-[12px]`}>
+        <div className={`flex items-center gap-[8px]`}>
           <input 
             onClick={() => onValueChange('off')}
             checked={value == 'off'}

@@ -187,7 +187,7 @@ export function FieldsInput<U extends FieldDataType>(props: FieldsInputProps<U>)
               return (
                 <Label 
                   key={i}
-                  label={tf.label}>
+                  label={`${tf.label} ${i + 1}`}>
                   { tf.view(props.data[tf.key], v => props.setData({ ...props.data, [tf.key]: v}), 0) }
                 </Label>
               );

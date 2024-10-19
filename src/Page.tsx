@@ -78,7 +78,7 @@ export function Page<T extends DataType, U extends FieldDataType>(props: PagePro
 
   useEffect(() => {
     getInitialOptionData();
-  }, []);
+  }, [props.columns]);
 
   useEffect(() => {
     getData();
