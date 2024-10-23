@@ -223,6 +223,11 @@ export default function() {
     columns={table_columns}
     onDelete={deleteData}
     deleteDataLabel={r => r.user.name}
+    rowActions={[{
+      view(row: MyItemType, i: number) {
+        return <div key={i}>{ row.id }</div>
+      }
+    }]}
     form={{
       title: 'Data',
       fields: table_fields,

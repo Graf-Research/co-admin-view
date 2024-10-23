@@ -5,7 +5,7 @@ import { PageLimit } from "./components/general/PageLimit";
 import { TableContainer } from "./components/general/TableContainer";
 import { InputText } from "./components/general/input/InputText";
 import { InputOptionModal } from "./components/general/input/InputOptionModal";
-import { TableActionTD } from "./components/general/TableActionTD";
+import { ActionItem, TableActionTD } from "./components/general/TableActionTD";
 import { DataType, FieldDataType, FilterParam, OptionItem, PaginatedData, SupportedDataType, TableColumn, TableColumnOptionFilter, TableField } from "./types";
 import { FormModal } from "./components/form/FormModal";
 import './index.css';
@@ -16,6 +16,7 @@ export interface PageProps<T extends DataType, U extends FieldDataType> {
   getData(limit: number, offset: number, filter: FilterParam): Promise<PaginatedData<T>>
   onDelete?(row: T): Promise<void>
   deleteDataLabel?(row: T): string
+  rowActions?: ActionItem<T>[]
   form?: {
     title?: string
     mapRowToFields(row: T): U
@@ -172,14 +173,15 @@ export function Page<T extends DataType, U extends FieldDataType>(props: PagePro
                       }
                     })
                   }
-                  <TableActionTD
+                  <TableActionTD<T>
+                    data={row}
                     onEdit={props.form ? () => {
                       setSelected(row);
                       setFormData(props.form!.mapRowToFields(row));
                       form_modal.current?.open();
                     } : undefined}
                     onDelete={() => deleteData(row)}
-                    />
+                    actions={props.rowActions ?? []} />
                 </tr>
               ))
             }
