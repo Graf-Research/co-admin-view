@@ -46,15 +46,17 @@ export function CAForm(props: CAFormProps) {
         case "new":
           result = await fetch(`${out_structure.current!.urls.create_new_url}`, {
             method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form_data)
+            body: JSON.stringify(form_data),
+            ...out_structure.current?.request_init?.create,
+            headers: { 'Content-Type': 'application/json', ...out_structure.current?.request_init?.create?.headers },
           });
           break;
         case "edit":
           result = await fetch(`${out_structure.current!.urls.update_data_url}?key=${props.activeForm.data_key}`, {
             method: 'put',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form_data)
+            body: JSON.stringify(form_data),
+            ...out_structure.current?.request_init?.update,
+            headers: { 'Content-Type': 'application/json', ...out_structure.current?.request_init?.update?.headers },
           });
           break;
       }
@@ -140,7 +142,7 @@ export function CAForm(props: CAFormProps) {
   async function getDetailDataAndFillForm(key: any) {
     setLoadingGetData(true);
     try {
-      const result = await fetch(`${out_structure.current!.urls.get_detail_url}?key=${key}`);
+      const result = await fetch(`${out_structure.current!.urls.get_detail_url}?key=${key}`, out_structure.current?.request_init?.get);
       if (result.ok) {
         const json_value = await result.json();
         setFormData(out_structure.current!.form_items.reduce((acc: FormData, curr: CAOutput.FieldFormItem) => {

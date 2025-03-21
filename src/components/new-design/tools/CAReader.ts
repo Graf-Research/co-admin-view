@@ -214,7 +214,8 @@ export class CAReader {
         get_url: data.urls.get_url,
         delete_url: data.urls.delete_url,
         export_url: data.urls.export_url,
-      }
+      },
+      request_init: data.request_init
     };
   }
 
@@ -233,7 +234,8 @@ export class CAReader {
         get_detail_url: data.urls.get_detail_url,
         create_new_url: data.urls.create_new_url,
         update_data_url: data.urls.update_data_url
-      }
+      },
+      request_init: data.request_init
     };
   }
 }

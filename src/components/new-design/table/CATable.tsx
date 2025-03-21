@@ -40,6 +40,7 @@ export function CATable(props: CATableProps) {
   const [list_selected_key, setListSelectedKey] = useState<any[]>([]);
   const [active_context_menu_key, setActiveContextMenuKey] = useState<any | null>(null);
   const [fetch_params, setFetchParams] = useState<{[key: string]: any}>({});
+  
   const all_selected = data.data.reduce((acc: boolean, curr: Row) => acc && list_selected_key.includes(curr[out_structure.current!.column_key]), true);
   const with_delete_feature = Boolean(out_structure.current.urls.delete_url);
 
@@ -59,7 +60,7 @@ export function CATable(props: CATableProps) {
         offset,
         ...fetch_params
       } as any).toString();
-      const result: PaginationData = await (await fetch(`${out_structure.current!.urls.get_url}?${query}`)).json();
+      const result: PaginationData = await (await fetch(`${out_structure.current!.urls.get_url}?${query}`, out_structure.current?.request_init?.get)).json();
       setData(result);
       setError(null);
     } catch (err: any) {
@@ -86,7 +87,7 @@ export function CATable(props: CATableProps) {
           limit,
           offset
         } as any).toString();
-        const fetch_data_result: PaginationData = await (await fetch(`${out_structure.current!.urls.get_url}?${fetch_data_query}`)).json();
+        const fetch_data_result: PaginationData = await (await fetch(`${out_structure.current!.urls.get_url}?${fetch_data_query}`, out_structure.current?.request_init?.delete)).json();
         setData(fetch_data_result);
         setListSelectedKey([]);
         setError(null);

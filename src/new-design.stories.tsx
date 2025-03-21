@@ -24,6 +24,13 @@ export function Preview() {
     urls: {
       get_url: 'http://localhost:3000/users',
       delete_url: 'http://localhost:3000/user'
+    },
+    request_init: {
+      get: {
+        headers: {
+          'Authorization': 'Bearer XYZ'
+        }
+      }
     }
   };
 

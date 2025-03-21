@@ -35,6 +35,11 @@ export namespace CAInput {
       delete_url?: string
       export_url?: string
     }
+    request_init?: {
+      get?: RequestInit
+      delete?: RequestInit
+      export?: RequestInit
+    }
   }
 
   export interface FormStructure {
@@ -45,6 +50,11 @@ export namespace CAInput {
       get_detail_url: string
       create_new_url: string
       update_data_url: string
+    }
+    request_init?: {
+      get?: RequestInit
+      create?: RequestInit
+      update?: RequestInit
     }
   }
 }
@@ -91,6 +101,11 @@ export namespace CAOutput {
       delete_url?: string
       export_url?: string
     }
+    request_init?: {
+      get?: RequestInit
+      delete?: RequestInit
+      export?: RequestInit
+    }
   }
 
   export interface FormStructure {
@@ -102,6 +117,11 @@ export namespace CAOutput {
       get_detail_url: string
       create_new_url: string
       update_data_url: string
+    }
+    request_init?: {
+      get?: RequestInit
+      create?: RequestInit
+      update?: RequestInit
     }
   }
 }
