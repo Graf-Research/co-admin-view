@@ -3,6 +3,11 @@
 ## Usage Example
 
 ```tsx
+// lokasi import mungkin berbeda-beda tergantung framework yang digunakan
+// pada NextJS, tambahkan import di _app.tsx
+// pada Create React App tambahkan di file yang sama
+import 'co-admin-view/dist/index.css'
+
 export function Preview() {
   const table: CAInput.TableStructure = {
     title: 'List Order Data X',
