@@ -3,6 +3,10 @@
 ## Install
 
 ```bash
+yarn add co-admin-view
+```
+
+```bash
 npm install --save co-admin-view
 ```
 
