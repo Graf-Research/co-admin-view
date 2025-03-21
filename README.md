@@ -13,10 +13,12 @@ npm install --save co-admin-view
 ## Usage Example
 
 ```tsx
-// lokasi import mungkin berbeda-beda tergantung framework yang digunakan
-// pada NextJS, tambahkan import di _app.tsx
+// lokasi import css mungkin berbeda-beda tergantung framework yang digunakan
+// pada NextJS, tambahkan import css di _app.tsx
 // pada Create React App tambahkan di file yang sama
 import 'co-admin-view/dist/index.css'
+
+import { CAInput, CAPage } from "co-admin-view";
 
 export function Preview() {
   const table: CAInput.TableStructure = {
