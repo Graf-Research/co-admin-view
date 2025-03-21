@@ -1,5 +1,11 @@
 # Co Admin View
 
+## Install
+
+```bash
+npm install --save co-admin-view
+```
+
 ## Usage Example
 
 ```tsx
