@@ -1,0 +1,115 @@
+.co-admin .table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 20px;
+  border: solid 2px rgba(200, 200, 200, .55);
+  border-radius: 10px;
+}
+
+.co-admin .table-container table {
+  border-collapse: collapse;
+}
+
+.co-admin .table-container table thead {
+  /*  */
+}
+
+.co-admin .table-container table thead tr {
+}
+
+.co-admin .table-container table thead th {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-weight: 600;
+  color: #444;
+  font-size: 14px;
+  background-color: whitesmoke;
+  text-align: left;
+}
+
+.co-admin .table-container table thead th:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.co-admin .table-container table thead th:last-child {
+  padding-right: 18px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+
+.co-admin .table-container table tbody {
+  /*  */
+}
+
+.co-admin .table-container table tbody tr {
+  vertical-align: middle;
+}
+
+.co-admin .table-container table tbody td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: 500;
+  color: #222;
+  font-size: 13px;
+  text-align: left;
+  border-top: solid 1px #EEE;
+  vertical-align: middle;
+}
+
+.three-dots {
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+}
+
+.co-admin .table-container table tbody td:first-child {
+  width: 16px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.co-admin .table-container table tbody td:last-child {
+  width: 16px;
+  padding-right: 18px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.co-admin .table-container table tbody tr:first-child td {
+  border: none;
+  padding-top: 24px;
+}
+
+.co-admin .delete {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.co-admin .delete button {
+  background: orangered;
+}
+
+.co-admin .table-container table tbody td.td-context-menu .context-menu {
+  position: relative;
+}
+
+.co-admin .table-container table tbody td.td-context-menu .context-menu div {
+  position: absolute;
+  right: 30%;
+  top: 90%;
+  box-shadow: 0px 1px 15px 1px rgba(0,0,0,.15);
+  z-index: 9;
+  padding: 8px 8px;
+  background-color: white;
+  border-radius: 8px;
+}

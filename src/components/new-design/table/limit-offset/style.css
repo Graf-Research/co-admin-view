@@ -1,0 +1,39 @@
+.co-admin .limit-offset {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.co-admin .limit-offset .limit {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.co-admin .limit-offset .offset {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.co-admin .limit-offset .offset .total-data {
+  margin-left: 12px;
+  font-size: 14px;
+  color: dimgray;
+}
+
+.co-admin .limit-offset .limit .label {
+  font-size: 14px;
+  color: dimgray;
+}
+
+.co-admin .limit-offset .offset input[type=number]::-webkit-inner-spin-button, 
+.co-admin .limit-offset .offset input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0; 
+}

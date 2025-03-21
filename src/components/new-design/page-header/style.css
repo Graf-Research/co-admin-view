@@ -1,0 +1,21 @@
+.co-admin > .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.co-admin > .header > .title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.co-admin > .header > .actions {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}

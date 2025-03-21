@@ -1,0 +1,12 @@
+{
+  "splitting": true,
+  "sourcemap": true,
+  "loader": {
+    ".css": "local-css"
+  },
+  "clean": true,
+  "minify": true,
+  "entry": [
+    "src/index.ts"
+  ]
+}
