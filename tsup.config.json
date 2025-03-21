@@ -5,7 +5,6 @@
     ".css": "local-css"
   },
   "clean": true,
-  "minify": true,
   "entry": [
     "src/index.ts"
   ]

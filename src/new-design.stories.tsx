@@ -1,6 +1,7 @@
 import React from 'react';
 import { CAPage } from './components/new-design/page/CAPage';
 import { CAInput } from './components/new-design/tools/types';
+import './main.css';
 
 export default {
    title: 'New Design',

@@ -1,0 +1,444 @@
+/* Page */
+.co-admin {
+  background-color: #FFF;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.co-admin > .table-form-container {
+  position: relative;
+  overflow-y: hidden;
+  height: stretch;
+}
+
+.co-admin > .table-form-container > .A-box {
+}
+
+.co-admin > .table-form-container > .B-box {
+}
+
+.skeleton {
+	background-color: #e2e5e7;
+	background-image:	linear-gradient(90deg, #FFF0, #fff7, #fff0);
+	background-size: 40px 100%;
+	background-repeat: no-repeat;
+	background-position: left -40px top 0;
+	animation: shine 1s ease infinite;
+  height: 15px;
+  margin-right: 20%;
+  border-radius: 6px;
+}
+
+@keyframes shine {
+	to {
+		background-position: right -40px top 0;
+	}
+}
+
+/* Page Header */
+.co-admin > .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.co-admin > .header > .title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.co-admin > .header > .actions {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+/* Table */
+.co-admin .table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 20px;
+  border: solid 2px rgba(200, 200, 200, .55);
+  border-radius: 10px;
+}
+
+.co-admin .table-container table {
+  border-collapse: collapse;
+}
+
+.co-admin .table-container table thead {
+  /*  */
+}
+
+.co-admin .table-container table thead tr {
+}
+
+.co-admin .table-container table thead th {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-weight: 600;
+  color: #444;
+  font-size: 14px;
+  background-color: whitesmoke;
+  text-align: left;
+}
+
+.co-admin .table-container table thead th:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.co-admin .table-container table thead th:last-child {
+  padding-right: 18px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+
+.co-admin .table-container table tbody {
+  /*  */
+}
+
+.co-admin .table-container table tbody tr {
+  vertical-align: middle;
+}
+
+.co-admin .table-container table tbody td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: 500;
+  color: #222;
+  font-size: 13px;
+  text-align: left;
+  border-top: solid 1px #EEE;
+  vertical-align: middle;
+}
+
+.three-dots {
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  min-width: 15px;
+  min-height: 15px;
+  object-fit: contain;
+}
+
+.co-admin .table-container table tbody td:first-child {
+  width: 16px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.co-admin .table-container table tbody td:last-child {
+  width: 16px;
+  padding-right: 18px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.co-admin .table-container table tbody tr:first-child td {
+  border: none;
+  padding-top: 24px;
+}
+
+.co-admin .delete {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.co-admin .delete button {
+  background: orangered;
+}
+
+.co-admin .table-container table tbody td.td-context-menu .context-menu {
+  position: relative;
+}
+
+.co-admin .table-container table tbody td.td-context-menu .context-menu div {
+  position: absolute;
+  right: 30%;
+  top: 90%;
+  box-shadow: 0px 1px 15px 1px rgba(0,0,0,.15);
+  z-index: 9;
+  padding: 8px 8px;
+  background-color: white;
+  border-radius: 8px;
+}
+
+/* Table Meta Action */
+.co-admin .meta-action {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.co-admin .meta-action .title {
+  font-size: 18px;
+}
+
+.co-admin .meta-action .actions {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+/* Table Limit Offset */
+.co-admin .limit-offset {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.co-admin .limit-offset .limit {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.co-admin .limit-offset .offset {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.co-admin .limit-offset .offset .total-data {
+  margin-left: 12px;
+  font-size: 14px;
+  color: dimgray;
+}
+
+.co-admin .limit-offset .limit .label {
+  font-size: 14px;
+  color: dimgray;
+}
+
+.co-admin .limit-offset .offset input[type=number]::-webkit-inner-spin-button, 
+.co-admin .limit-offset .offset input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0; 
+}
+
+/* Form */
+.co-admin .form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 20px;
+  border: solid 2px rgba(200, 200, 200, .55);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.co-admin .form-container .buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.co-admin .form-container .title {
+  font-size: 20px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  font-weight: 600;
+}
+
+.co-admin .form-container .subtitle {
+  font-size: 18px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.co-admin .form-container .subsubtitle {
+  font-size: 16px;
+  padding-bottom: 1px;
+  padding-top: 1px;
+  color: #555;
+}
+
+.co-admin .form-container .row {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.co-admin .form-container .row > .column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.co-admin .form-container .loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  background: #FFF9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loader */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  display: grid;
+  border: 4px solid #0000;
+  border-radius: 50%;
+  border-color: gainsboro #0000;
+  animation: l16 1s infinite linear;
+}
+.loader::before,
+.loader::after {    
+  content: "";
+  grid-area: 1/1;
+  margin: 2px;
+  border: inherit;
+  border-radius: 50%;
+}
+.loader::before {
+  border-color: goldenrod #0000;
+  animation: inherit; 
+  animation-duration: .5s;
+  animation-direction: reverse;
+}
+.loader::after {
+  margin: 8px;
+}
+@keyframes l16 { 
+  100%{transform: rotate(1turn)}
+}
+
+/* Button */
+.co-admin button {
+  outline: none;
+  padding: 9px 18px;
+  background-color: dimgray;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  height: 34px;
+  align-self: start;
+}
+
+.co-admin button > img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.co-admin button > img.small {
+  width: 14px;
+  height: 14px;
+}
+
+.co-admin button > img.big {
+  width: 19px;
+  height: 19px;
+}
+
+.co-admin button.outline {
+  padding: 7.5px 16.5px;
+  background-color: white;
+  border: solid 2px rgba(105, 105, 105, .3);
+  color: dimgray;
+}
+
+.co-admin button.clean {
+  background-color: transparent;
+  color: darkslategrey;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.co-admin button.normal {
+  background-color: darkgoldenrod;
+  color: white;
+}
+
+/* Input */
+.co-admin input:not([type="checkbox"]), select {
+  outline: none;
+  padding: 0px 12px;
+  background-color: transparent;
+  border: solid 2px rgba(105, 105, 105, .2);
+  border-radius: 6px;
+  height: 34px;
+  box-sizing: border-box;
+  font-size: 13px;
+  transition: 250ms;
+}
+
+.co-admin input:not([type="checkbox"]):focus {
+  border: solid 2px rgba(105, 105, 105, .5);
+}
+
+.co-admin .input-img-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.co-admin .input-img-container img {
+  position: absolute;
+  margin-left: 12px;
+  width: 17px;
+  height: 17px;
+}
+
+.co-admin .input-img-container img + input {
+  padding-left: 36px;
+  width: 100%;
+}
+
+.co-admin .input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.co-admin .input-container > label {
+  font-size: 13px;
+  color: dimgray;
+  font-weight: 600;
+}
+
+.co-admin .form-container > .row > .input-container {
+  flex: 1;
+}
+

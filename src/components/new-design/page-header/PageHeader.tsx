@@ -1,5 +1,4 @@
 import React from "react";
-import './style.css';
 
 interface PageHeaderProps {
   title: string

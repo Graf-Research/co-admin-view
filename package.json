@@ -1,13 +1,14 @@
 {
   "name": "co-admin-view",
-  "version": "5.0.3",
+  "version": "5.1.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup --dts",
+    "build": "tsup --dts && npm run replace-prefix-css",
+    "replace-prefix-css": "sed -i -e 's/\\.main_/\\./g' dist/index.css",
     "ladle": "BROWSER=none ladle serve"
   },
   "peerDependencies": {
@@ -28,8 +29,6 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "autoprefixer": "^10.4.21",
-    "lodash": "^4.17.21",
-    "postcss": "^8.5.3"
+    "lodash": "^4.17.21"
   }
 }

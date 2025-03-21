@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import './style.css';
 import { CAInput, CAOutput } from "../tools/types";
 import { CAReader } from "../tools/CAReader";
 import { ActiveForm } from "../page/types";

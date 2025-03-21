@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
-import './style.css';
 import { PageHeader } from "../page-header/PageHeader";
 import { CATable } from "../table/CATable";
 import { CAForm } from "../form/CAForm";

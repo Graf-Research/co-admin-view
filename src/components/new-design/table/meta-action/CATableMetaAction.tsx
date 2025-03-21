@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import './style.css';
 import { CAInput, CAOutput } from "../../tools/types";
 
 interface CATableMetaActionProps {

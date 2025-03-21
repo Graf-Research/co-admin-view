@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import './style.css';
 import { CATableMetaAction } from "./meta-action/CATableMetaAction";
 import { CATableLimitOffset } from "./limit-offset/CATableLimitOffset";
 import { CAInput, CAOutput } from "../tools/types";
