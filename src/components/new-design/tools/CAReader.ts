@@ -119,12 +119,12 @@ export class CAReader {
     return out;
   }
 
-  getFormItems(table_structure: CAOutput.TableStructure, available_option_data_source_keys: string[], items: CAInput.FormItem[]): [CAOutput.FormItem[], CAOutput.L0_FormItem[]] {
+  getFormItems(table_structure: CAOutput.TableStructure, available_option_data_source_keys: string[], form_structure: CAInput.FormStructure, items: CAInput.FormItem[]): [CAOutput.FormItem[], CAOutput.L0_FormItem[]] {
     const out: CAOutput.FormItem[] = [];
     const flatten_out: CAOutput.L0_FormItem[] = [];
     for (let i = 0; i < items.length; i++) {
       if (Array.isArray(items[i])) {
-        const [sub_result] = this.getFormItems(table_structure, available_option_data_source_keys, items[i] as CAInput.FormItem[]) as [CAOutput.L2_FormItem, CAOutput.L0_FormItem[]];
+        const [sub_result] = this.getFormItems(table_structure, available_option_data_source_keys, form_structure, items[i] as CAInput.FormItem[]) as [CAOutput.L2_FormItem, CAOutput.L0_FormItem[]];
         out.push(sub_result);
 
         // For Flatten Helper Purpose Only
@@ -159,6 +159,7 @@ export class CAReader {
         case "CHECKBOX":
         case "RADIO":
         case "SELECT":
+        case "CUSTOM":
           break;
         default:
           throw new Error(`form items index ${i + 1} form type "${type}" is not available`);
@@ -180,14 +181,34 @@ export class CAReader {
         throw new Error(`form items index ${i + 1} filter query key "${data_key}" duplicated, already exist on index ${duplicate_data_key_index}`);
       }
 
-      const l0 = {
-        type,
-        source_key,
-        data_key,
-        label: css[3] ?? data_key
-      };
-      out.push(l0);
-      flatten_out.push(l0);
+
+      if (type === 'CUSTOM') {
+        if (!form_structure.custom_view) {
+          throw new Error(`form items index ${i + 1} form type "CUSTOM" should provide custom view react node`);
+        }
+        if (!form_structure.custom_view[data_key]) {
+          throw new Error(`form items index ${i + 1} form type "CUSTOM" no custom view react node provided`);
+        }
+        const l0: CAOutput.FieldFormItemCustom = {
+          type,
+          source_key,
+          data_key,
+          label: css[3] ?? data_key,
+          view: form_structure.custom_view[data_key]
+        };
+        out.push(l0);
+        flatten_out.push(l0);
+      } else {
+        const l0: CAOutput.FieldFormItem = {
+          type,
+          source_key,
+          data_key,
+          label: css[3] ?? data_key
+        };
+        out.push(l0);
+        flatten_out.push(l0);
+      }
+
     }
     return [out, flatten_out];
   }
@@ -203,6 +224,15 @@ export class CAReader {
       throw new Error(`table structure column key "${data.column_key}" doesn't exist on table columns`);
     }
 
+    if (data.custom_view) {
+      for (const custom_view_key of Object.keys(data.custom_view)) {
+        const column_key_index = columns.findIndex(c => c.key == custom_view_key);
+        if (column_key_index == -1) {
+          throw new Error(`table structure custom view key "${custom_view_key}" doesn't exist on table columns`);
+        }
+      }
+    }
+
     return {
       title: data.title,
       columns,
@@ -215,15 +245,16 @@ export class CAReader {
         delete_url: data.urls.delete_url,
         export_url: data.urls.export_url,
       },
-      request_init: data.request_init
+      request_init: data.request_init,
+      custom_view: data.custom_view
     };
   }
 
   getFormStructure(table_structure: CAOutput.TableStructure, data: CAInput.FormStructure): CAOutput.FormStructure {
     const options_data_source = this.getOptionsDataSource(data.options_data_source);
     const available_option_data_source_keys: string[] = options_data_source.reduce((acc: string[], s) => [...acc, ...s.query_keys], []);
-    const [items, flatten_out] = this.getFormItems(table_structure, available_option_data_source_keys, data.items);
-    const form_items: CAOutput.FieldFormItem[] = flatten_out.filter(item => typeof item !== 'string');
+    const [items, flatten_out] = this.getFormItems(table_structure, available_option_data_source_keys, data, data.items);
+    const form_items: (CAOutput.FieldFormItem | CAOutput.FieldFormItemCustom)[] = flatten_out.filter(item => typeof item !== 'string');
 
     return {
       title: data.title,

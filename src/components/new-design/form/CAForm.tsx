@@ -94,6 +94,19 @@ export function CAForm(props: CAFormProps) {
       );
     }
 
+    if (item.type === 'CUSTOM') {
+      return (
+        <div 
+          key={key}
+          className={'input-container'}>
+          <label>
+            { item.label }
+          </label>
+          { (item as CAOutput.FieldFormItemCustom).view(form_data[item.data_key], (value: any) => setFormData({ ...form_data, [item.data_key]: value })) }
+        </div>
+      );
+    }
+
     const l0_item = item as CAOutput.FieldFormItem;
     switch (l0_item.type) {
       case "INPUT-TEXT":
@@ -129,7 +142,7 @@ export function CAForm(props: CAFormProps) {
       case "RADIO":
       case "SELECT":
       case "CHECKBOX":
-      default:undefined
+      default:
         return (
           <div
             key={key}>
@@ -145,7 +158,7 @@ export function CAForm(props: CAFormProps) {
       const result = await fetch(`${out_structure.current!.urls.get_detail_url}?key=${key}`, out_structure.current?.request_init?.get);
       if (result.ok) {
         const json_value = await result.json();
-        setFormData(out_structure.current!.form_items.reduce((acc: FormData, curr: CAOutput.FieldFormItem) => {
+        setFormData(out_structure.current!.form_items.reduce((acc: FormData, curr: (CAOutput.FieldFormItem | CAOutput.FieldFormItemCustom)) => {
           acc[curr.data_key] = json_value[curr.source_key];
           return acc;
         }, {}));

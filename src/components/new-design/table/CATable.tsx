@@ -123,12 +123,14 @@ export function CATable(props: CATableProps) {
       <table>
         <thead>
           <tr>
-            { with_delete_feature && <th>
-              <input 
-                checked={all_selected}
-                onChange={() => toggleSelectAll()}
-                type={'checkbox'} />
-            </th> }
+            {
+              with_delete_feature && <th>
+                <input 
+                  checked={all_selected}
+                  onChange={() => toggleSelectAll()}
+                  type={'checkbox'} />
+              </th>
+            }
             {
               out_structure.current.columns.map((tc: CAOutput.TableColumn, i: number) => (
                 <th key={i}>
@@ -143,38 +145,48 @@ export function CATable(props: CATableProps) {
           {
             data.data.map((row: Row, i: number) => (
               <tr key={i}>
-                { with_delete_feature && <td>
-                  <input 
-                    checked={list_selected_key.includes(row[out_structure.current!.column_key])}
-                    onChange={() => {
-                      const pk = row[out_structure.current!.column_key];
-                      if (list_selected_key.includes(pk)) {
-                        setListSelectedKey(list_selected_key.filter(c => c !== pk));
-                      } else {
-                        setListSelectedKey([ ...list_selected_key, pk ]);
-                      }
-                    }}
-                    type={'checkbox'} />
-                </td> }
+                {
+                  with_delete_feature && <td>
+                    <input 
+                      checked={list_selected_key.includes(row[out_structure.current!.column_key])}
+                      onChange={() => {
+                        const pk = row[out_structure.current!.column_key];
+                        if (list_selected_key.includes(pk)) {
+                          setListSelectedKey(list_selected_key.filter(c => c !== pk));
+                        } else {
+                          setListSelectedKey([ ...list_selected_key, pk ]);
+                        }
+                      }}
+                      type={'checkbox'} />
+                  </td>
+                }
                 {
                   out_structure.current!.columns.map((tc: CAOutput.TableColumn, j: number) => (
                     <td key={`${i}-${j}`}>
                       { (loading_fetch_data || (list_selected_key.includes(row[out_structure.current!.column_key]) && loading_delete_data)) && <div className={'skeleton'} /> }
-                      { (!loading_fetch_data && !(list_selected_key.includes(row[out_structure.current!.column_key]) && loading_delete_data)) && row[tc.key] }
+                      {
+                        (!loading_fetch_data && !(list_selected_key.includes(row[out_structure.current!.column_key]) && loading_delete_data)) && (
+                          out_structure.current?.custom_view?.[tc.key]
+                          ? out_structure.current?.custom_view?.[tc.key](row[tc.key])
+                          : row[tc.key]
+                        )
+                      }
                     </td>
                   ))
                 }
-                { props.onEdit && <td className={`td-context-menu`}>
-                  <div className="context-menu">
-                    <img 
-                      onClick={() => setActiveContextMenuKey(row[out_structure.current!.column_key])}
-                      className={'three-dots'}
-                      src={'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IS0tIFVwbG9hZGVkIHRvOiBTVkcgUmVwbywgd3d3LnN2Z3JlcG8uY29tLCBHZW5lcmF0b3I6IFNWRyBSZXBvIE1peGVyIFRvb2xzIC0tPgo8c3ZnIHdpZHRoPSI4MDBweCIgaGVpZ2h0PSI4MDBweCIgdmlld0JveD0iMCAwIDE2IDE2IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9IiMwMDAwMDAiIGNsYXNzPSJiaSBiaS10aHJlZS1kb3RzLXZlcnRpY2FsIj4KICA8cGF0aCBkPSJNOS41IDEzYTEuNSAxLjUgMCAxIDEtMyAwIDEuNSAxLjUgMCAwIDEgMyAwem0wLTVhMS41IDEuNSAwIDEgMS0zIDAgMS41IDEuNSAwIDAgMSAzIDB6bTAtNWExLjUgMS41IDAgMSAxLTMgMCAxLjUgMS41IDAgMCAxIDMgMHoiLz4KPC9zdmc+'} />
-                    { row[out_structure.current!.column_key] == active_context_menu_key && <CATableContextMenu
-                      onEdit={() => props.onEdit!(row[out_structure.current!.column_key])} 
-                      onClose={() => setActiveContextMenuKey(null)} /> }
-                  </div>
-                </td> }
+                {
+                  props.onEdit && <td className={`td-context-menu`}>
+                    <div className="context-menu">
+                      <img 
+                        onClick={() => setActiveContextMenuKey(row[out_structure.current!.column_key])}
+                        className={'three-dots'}
+                        src={'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IS0tIFVwbG9hZGVkIHRvOiBTVkcgUmVwbywgd3d3LnN2Z3JlcG8uY29tLCBHZW5lcmF0b3I6IFNWRyBSZXBvIE1peGVyIFRvb2xzIC0tPgo8c3ZnIHdpZHRoPSI4MDBweCIgaGVpZ2h0PSI4MDBweCIgdmlld0JveD0iMCAwIDE2IDE2IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9IiMwMDAwMDAiIGNsYXNzPSJiaSBiaS10aHJlZS1kb3RzLXZlcnRpY2FsIj4KICA8cGF0aCBkPSJNOS41IDEzYTEuNSAxLjUgMCAxIDEtMyAwIDEuNSAxLjUgMCAwIDEgMyAwem0wLTVhMS41IDEuNSAwIDEgMS0zIDAgMS41IDEuNSAwIDAgMSAzIDB6bTAtNWExLjUgMS41IDAgMSAxLTMgMCAxLjUgMS41IDAgMCAxIDMgMHoiLz4KPC9zdmc+'} />
+                      { row[out_structure.current!.column_key] == active_context_menu_key && <CATableContextMenu
+                        onEdit={() => props.onEdit!(row[out_structure.current!.column_key])} 
+                        onClose={() => setActiveContextMenuKey(null)} /> }
+                    </div>
+                  </td>
+                }
               </tr>
             ))
           }

@@ -10,7 +10,7 @@ export namespace CAInput {
   export type TableFilter = `${AvailableTableFilter}:${TableFilterQueryKey}:${TableFilterSourceKey}` | `${AvailableTableFilter}:${TableFilterQueryKey}:${TableFilterSourceKey}:${TableFilterLabel}`;
 
   export type FormItemSection = string;
-  export type AvailableFormItemType = 'INPUT-TEXT' | 'TEXTAREA' | 'RADIO' | 'SELECT' | 'CHECKBOX';
+  export type AvailableFormItemType = 'INPUT-TEXT' | 'TEXTAREA' | 'RADIO' | 'SELECT' | 'CHECKBOX' | 'CUSTOM';
   export type FormItemDataKey = string;
   export type FormItemSourceKey = string;
   export type FormItemLabel = string;
@@ -40,6 +40,7 @@ export namespace CAInput {
       delete?: RequestInit
       export?: RequestInit
     }
+    custom_view?: {[key: string]: (value: any) => JSX.Element}
   }
 
   export interface FormStructure {
@@ -56,6 +57,7 @@ export namespace CAInput {
       create?: RequestInit
       update?: RequestInit
     }
+    custom_view?: {[key: FormItemDataKey]: (value: any, setValue: (value: any) => void) => JSX.Element}
   }
 }
 
@@ -77,6 +79,14 @@ export namespace CAOutput {
     source_url: CAInput.OptionsDataSourceURL
   }
 
+  export interface FieldFormItemCustom {
+    type: 'CUSTOM'
+    data_key: CAInput.FormItemDataKey
+    source_key: CAInput.FormItemSourceKey
+    label: CAInput.FormItemLabel
+    view(value: any, setValue: (value: any) => void): JSX.Element
+  }
+
   export interface FieldFormItem {
     type: CAInput.AvailableFormItemType
     data_key: CAInput.FormItemDataKey
@@ -84,7 +94,7 @@ export namespace CAOutput {
     label: CAInput.FormItemLabel
   }
 
-  export type L0_FormItem = CAInput.FormItemSection | FieldFormItem;
+  export type L0_FormItem = CAInput.FormItemSection | FieldFormItem | FieldFormItemCustom;
   export type L1_FormItem = L0_FormItem | L0_FormItem[];
   export type L2_FormItem = L0_FormItem | L1_FormItem | L1_FormItem[];
   export type FormItem = L2_FormItem;
@@ -106,12 +116,13 @@ export namespace CAOutput {
       delete?: RequestInit
       export?: RequestInit
     }
+    custom_view?: {[key: string]: (value: any) => JSX.Element}
   }
 
   export interface FormStructure {
     title: string
     items: FormItem[]
-    form_items: FieldFormItem[]
+    form_items: (FieldFormItem | FieldFormItemCustom)[]
     options_data_source?: OptionsDataSource[]
     urls: {
       get_detail_url: string
