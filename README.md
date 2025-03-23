@@ -10,6 +10,10 @@ yarn add co-admin-view
 npm install --save co-admin-view
 ```
 
+## How to Use
+
+![](images/1.png)
+
 ## Usage Example
 
 
@@ -73,6 +77,14 @@ export function Preview() {
       get_url: 'http://localhost:3000/users',
       delete_url: 'http://localhost:3000/user'
     },
+    filters: [
+      'freetext:nama:nama:Nama Lengkap',
+      'select:type:type:User Type',
+      'select:type_alternative:type_alt:User Type Alt'
+    ],
+    filter_options_data_source: [
+      'type,type_alternative@http://localhost:3000/user/types'
+    ],
     request_init: {
       get: {
         headers: {
@@ -81,9 +93,24 @@ export function Preview() {
       }
     },
     custom_view: {
-      nama(nama: string) {
+      nama(value: string) {
         return (
-          <div style={{ color: 'red', fontWeight: 'bold' }}>{ nama }</div>
+          <div style={{ color: 'red', fontWeight: 'bold' }}>{ value }</div>
+        );
+      },
+      type(value: string) {
+        return (
+          <div style={{ display: 'flex' }}>
+            <div 
+              style={{
+                borderRadius: 8,
+                padding: '6px 12px',
+                background: '#AAA',
+                color: 'white'
+              }}>
+              { value }
+            </div>
+          </div>
         );
       }
     }
@@ -99,13 +126,14 @@ export function Preview() {
         'INPUT-TEXT:phone_number:phone_number:Nomor HP',
       ],
       [
-        'INPUT-TEXT:type:type:Jenis',
+        'SELECT:type:type:Jenis',
         'INPUT-TEXT:tanggal_lahir:tanggal_lahir:Tanggal Lahir (YYYY-MM-DD)',
       ],
-      'CUSTOM:alamat:alamat:Alamat',
+      'TEXTAREA:alamat:alamat:Alamat',
+      'INPUT-NUMBER:n:n:N',
     ],
     options_data_source: [
-      'id_user,id_user_alternative@https://lalala.com/list-data-x'
+      'type@http://localhost:3000/user/types'
     ],
     urls: {
       get_detail_url: 'http://localhost:3000/user',
@@ -121,7 +149,8 @@ export function Preview() {
             onChange={e => setValue(e.target.value)} />
         );
       }
-    }
+    },
+    allow_anonymous_data_key: true
   };
 
   return (

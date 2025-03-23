@@ -14,6 +14,10 @@ interface CAFormProps {
 }
 
 type FormData = {[key: string]: any}
+interface OptionDataItem {
+  label: string
+  value: any
+}
 
 export function CAForm(props: CAFormProps) {
   const out_structure = useRef<CAOutput.FormStructure>();
@@ -33,6 +37,7 @@ export function CAForm(props: CAFormProps) {
   }
 
   const [form_data, setFormData] = useState<FormData>({});
+  const [options_data, setOptionsData] = useState<{[key: string]: OptionDataItem[]}>({});
   const [loading_submit, setLoadingSubmit] = useState<boolean>(false);
   const [loading_get_data, setLoadingGetData] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -124,7 +129,7 @@ export function CAForm(props: CAFormProps) {
               type={'text'} />
           </div>
         );
-      case "TEXTAREA":
+      case "INPUT-NUMBER":
         return (
           <div 
             key={key}
@@ -136,11 +141,47 @@ export function CAForm(props: CAFormProps) {
               value={form_data[l0_item.data_key] ?? ''}
               onChange={e => setFormData({ ...form_data, [l0_item.data_key]: e.target.value })}
               placeholder={l0_item.label}
-              type={'text'} />
+              type={'number'} />
+          </div>
+        );
+      case "TEXTAREA":
+        return (
+          <div 
+            key={key}
+            className={'input-container'}>
+            <label>
+              { l0_item.label }
+            </label>
+            <textarea 
+              value={form_data[l0_item.data_key] ?? ''}
+              onChange={e => setFormData({ ...form_data, [l0_item.data_key]: e.target.value })}
+              placeholder={l0_item.label} />
+          </div>
+        );
+      case "SELECT":
+        return (
+          <div 
+            key={key}
+            className={'input-container'}>
+            <label>
+              { l0_item.label }
+            </label>
+            <select 
+              value={form_data[l0_item.data_key] ?? ''}
+              onChange={e => setFormData({ ...form_data, [l0_item.data_key]: e.target.value })}>
+              {
+                options_data[l0_item.data_key]?.map((o: OptionDataItem, i: number) => (
+                  <option
+                    key={i}
+                    value={o.value}>
+                    { o.label }
+                  </option>
+                ))
+              }
+            </select>
           </div>
         );
       case "RADIO":
-      case "SELECT":
       case "CHECKBOX":
       default:
         return (
@@ -173,9 +214,35 @@ export function CAForm(props: CAFormProps) {
     }
   }
 
+  async function getAllOptionsData() {
+    if (!out_structure.current?.options_data_source) {
+      return;
+    }
+    try {
+      for (const option_data_source of out_structure.current.options_data_source) {
+        const result = await fetch(option_data_source.source_url);
+        if (result.ok) {
+          const json_value = await result.json();
+          setOptionsData({
+            ...options_data,
+            ...option_data_source.query_keys.reduce((acc: {[key: string]: OptionDataItem[]}, query_key: string) => {
+              acc[query_key] = json_value;
+              return acc;
+            }, {})
+          });
+        } else {
+          setError(await result.text());
+        }
+      }
+    } catch (err: any) {
+      setError(err.toString());
+    }
+  }
+
   useEffect(() => {
     setFormData({});
     if (props.activeForm.active) {
+      getAllOptionsData();
       if (props.activeForm.mode === 'edit') {
         getDetailDataAndFillForm(props.activeForm.data_key);
       } else {

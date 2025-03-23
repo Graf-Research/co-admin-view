@@ -9,7 +9,6 @@
 
 .co-admin > .table-form-container {
   position: relative;
-  overflow-y: hidden;
   height: stretch;
 }
 
@@ -199,6 +198,30 @@
   align-items: center;
   justify-content: flex-end;
   gap: 20px;
+}
+
+.co-admin .meta-action .actions .button-filter {
+  position: relative;
+}
+
+.co-admin .meta-action .actions .button-filter .filter-container {
+  font-size: 14px;
+  position: absolute;
+  right: 0;
+  padding: 14px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0px 1px 15px 1px rgba(0,0,0,.15);
+}
+
+.co-admin .meta-action .actions .button-filter .filter-container .filter-title {
+  font-size: 14px;
+}
+
+.co-admin .meta-action .actions .button-filter .filter-container .filter-items {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
 }
 
 /* Table Limit Offset */
@@ -392,7 +415,7 @@
 }
 
 /* Input */
-.co-admin input:not([type="checkbox"]), select {
+.co-admin input:not([type="checkbox"]), select, textarea {
   outline: none;
   padding: 0px 12px;
   background-color: transparent;
@@ -402,6 +425,13 @@
   box-sizing: border-box;
   font-size: 13px;
   transition: 250ms;
+}
+
+.co-admin textarea {
+  padding: 8px 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 70px;
+  line-height: 1.4;
 }
 
 .co-admin input:not([type="checkbox"]):focus {

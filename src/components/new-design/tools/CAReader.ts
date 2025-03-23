@@ -72,10 +72,13 @@ export class CAReader {
           throw new Error(`filter columns index ${i + 1} filter type "${type}" is not available`);
       }
       const source_key = css[2];
-      const sk_column_index = columns.findIndex((c: CAOutput.TableColumn) => c.key == source_key);
-      if (sk_column_index == -1) {
-        throw new Error(`filter columns index ${i + 1} source key "${source_key}" doesn't exist on table columns`);
-      }
+
+      // Note: I am avoiding this feature, since filter key sometimes not included on table column keys
+      // -------
+      // const sk_column_index = columns.findIndex((c: CAOutput.TableColumn) => c.key == source_key);
+      // if (sk_column_index == -1) {
+      //   throw new Error(`filter columns index ${i + 1} source key "${source_key}" doesn't exist on table columns`);
+      // }
 
       const query_key = css[1];
       if (type === 'select' && !available_option_data_source_keys.includes(query_key)) {
@@ -155,6 +158,7 @@ export class CAReader {
       const type: CAInput.AvailableFormItemType = css[0] as CAInput.AvailableFormItemType;
       switch (type) {
         case "INPUT-TEXT":
+        case "INPUT-NUMBER":
         case "TEXTAREA":
         case "CHECKBOX":
         case "RADIO":
@@ -166,9 +170,11 @@ export class CAReader {
       }
 
       const source_key = css[2];
-      const sk_column_index = table_structure.columns.findIndex(c => c.key == source_key);
-      if (sk_column_index == -1) {
-        throw new Error(`form items index ${i + 1} source key "${source_key}" doesn't exist on table columns`);
+      if (!form_structure.allow_anonymous_data_key) {
+        const sk_column_index = table_structure.columns.findIndex(c => c.key == source_key);
+        if (sk_column_index == -1) {
+          throw new Error(`form items index ${i + 1} source key "${source_key}" doesn't exist on table columns. If you want to allow anonymous data key on form, add { allow_anonymous_data_key: true } on FormStructure`);
+        }
       }
 
       const data_key = css[1];
@@ -266,7 +272,8 @@ export class CAReader {
         create_new_url: data.urls.create_new_url,
         update_data_url: data.urls.update_data_url
       },
-      request_init: data.request_init
+      request_init: data.request_init,
+      allow_anonymous_data_key: data.allow_anonymous_data_key
     };
   }
 }

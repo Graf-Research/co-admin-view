@@ -4,6 +4,7 @@ import { CATableLimitOffset } from "./limit-offset/CATableLimitOffset";
 import { CAInput, CAOutput } from "../tools/types";
 import { CAReader } from "../tools/CAReader";
 import { CATableContextMenu } from "./context-menu/CATableContextMenu";
+import { FilterData } from "./meta-action/CATableMetaFilter";
 
 interface CATableProps {
   refreshDataTrigger: Date
@@ -109,9 +110,14 @@ export function CATable(props: CATableProps) {
     <div className="table-container">
       { error && <pre style={{ fontSize: 12, whiteSpace: 'normal', background: '#FECACA' }}>{ new Date().toLocaleString() }<br/>{ error }</pre> }
       <CATableMetaAction 
-        onSearch={(q: string) => {
+        setError={setError}
+        onSearchFilter={(q: string, filter_data: FilterData) => {
           if (out_structure.current?.search_query_key) {
-            setFetchParams({ ...fetch_params, [out_structure.current.search_query_key]: q });
+            setFetchParams({
+              ...fetch_params,
+              [out_structure.current.search_query_key]: q,
+              ...filter_data
+            });
           }
         }}
         structure={out_structure.current} />
@@ -178,7 +184,8 @@ export function CATable(props: CATableProps) {
                   props.onEdit && <td className={`td-context-menu`}>
                     <div className="context-menu">
                       <img 
-                        onClick={() => setActiveContextMenuKey(row[out_structure.current!.column_key])}
+                        onMouseUp={e => e.stopPropagation()}
+                        onClick={() => setActiveContextMenuKey(row[out_structure.current!.column_key] == active_context_menu_key ? null : row[out_structure.current!.column_key])}
                         className={'three-dots'}
                         src={'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IS0tIFVwbG9hZGVkIHRvOiBTVkcgUmVwbywgd3d3LnN2Z3JlcG8uY29tLCBHZW5lcmF0b3I6IFNWRyBSZXBvIE1peGVyIFRvb2xzIC0tPgo8c3ZnIHdpZHRoPSI4MDBweCIgaGVpZ2h0PSI4MDBweCIgdmlld0JveD0iMCAwIDE2IDE2IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9IiMwMDAwMDAiIGNsYXNzPSJiaSBiaS10aHJlZS1kb3RzLXZlcnRpY2FsIj4KICA8cGF0aCBkPSJNOS41IDEzYTEuNSAxLjUgMCAxIDEtMyAwIDEuNSAxLjUgMCAwIDEgMyAwem0wLTVhMS41IDEuNSAwIDEgMS0zIDAgMS41IDEuNSAwIDAgMSAzIDB6bTAtNWExLjUgMS41IDAgMSAxLTMgMCAxLjUgMS41IDAgMCAxIDMgMHoiLz4KPC9zdmc+'} />
                       { row[out_structure.current!.column_key] == active_context_menu_key && <CATableContextMenu

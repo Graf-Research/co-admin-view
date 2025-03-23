@@ -10,7 +10,7 @@ export namespace CAInput {
   export type TableFilter = `${AvailableTableFilter}:${TableFilterQueryKey}:${TableFilterSourceKey}` | `${AvailableTableFilter}:${TableFilterQueryKey}:${TableFilterSourceKey}:${TableFilterLabel}`;
 
   export type FormItemSection = string;
-  export type AvailableFormItemType = 'INPUT-TEXT' | 'TEXTAREA' | 'RADIO' | 'SELECT' | 'CHECKBOX' | 'CUSTOM';
+  export type AvailableFormItemType = 'INPUT-TEXT' | 'INPUT-NUMBER' | 'TEXTAREA' | 'RADIO' | 'SELECT' | 'CHECKBOX' | 'CUSTOM';
   export type FormItemDataKey = string;
   export type FormItemSourceKey = string;
   export type FormItemLabel = string;
@@ -58,6 +58,7 @@ export namespace CAInput {
       update?: RequestInit
     }
     custom_view?: {[key: FormItemDataKey]: (value: any, setValue: (value: any) => void) => JSX.Element}
+    allow_anonymous_data_key?: boolean
   }
 }
 
@@ -134,5 +135,6 @@ export namespace CAOutput {
       create?: RequestInit
       update?: RequestInit
     }
+    allow_anonymous_data_key?: boolean
   }
 }
