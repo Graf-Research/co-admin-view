@@ -12,7 +12,13 @@ npm install --save co-admin-view
 
 ## How to Use
 
+### General Table
+
 ![](images/1.png)
+
+### Table Search & Filter
+
+![](images/2.png)
 
 ## Usage Example
 
@@ -80,10 +86,10 @@ export function Preview() {
     filters: [
       'freetext:nama:nama:Nama Lengkap',
       'select:type:type:User Type',
-      'select:type_alternative:type_alt:User Type Alt'
+      'select:fb:filter_b:F-B'
     ],
     filter_options_data_source: [
-      'type,type_alternative@http://localhost:3000/user/types'
+      'type,fb@http://localhost:3000/user/types'
     ],
     request_init: {
       get: {
