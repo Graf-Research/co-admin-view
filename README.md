@@ -178,3 +178,219 @@ export function Preview() {
   );
 }
 ```
+
+## API Specification
+
+### Table GET
+
+#### Request
+
+##### Query
+
+Basic
+- `limit` number (required)
+- `offset` number (required)
+
+Search
+- `<search query key>` string (optional). _Look at Table Search & Filter diagram above_
+
+
+Filters
+- `<filter key 1>` string (optional). _Look at Table Search & Filter diagram above_
+- `<filter key 2>` string (optional). _Look at Table Search & Filter diagram above_
+- `<filter key N>` string (optional). _Look at Table Search & Filter diagram above_
+
+#### Response
+
+- `total` number
+- `data` array of object. Object must be at least contains all keys from columns specifications. _Look at General Table diagram above_.
+
+#### Example
+
+URL `http://localhost:3000/users`
+
+Request
+
+```bash
+curl -X GET 'http://localhost:3000/users?limit=10&offset=0&q=Andi&nama=&type=Regular'
+```
+
+Response
+
+```json
+{
+  "total": 4,
+  "data": [
+    {
+      "id": 16,
+      "email": "andi@aa.aa",
+      "phone_number": "08121111111",
+      "nama": "Andi",
+      "type": "Regular",
+      "tanggal_lahir": "2020-01-09T17:00:00.000Z",
+      "alamat": "Bandung 999",
+      "created_at": "2025-03-20T23:45:33.444Z"
+    },
+    ...
+  ]
+}
+```
+
+### Table DELETE
+
+#### Request
+
+##### Query
+
+- `keys` string (required). String contains array of `<column key>` with comma separated value. _Look at Table General Table diagram above_
+
+#### Response
+
+Any response is accepted as long as returned HTTP code 200 (OK)
+
+#### Example
+
+URL `http://localhost:3000/user`
+
+Request
+
+```bash
+curl -X DELETE 'http://localhost:3000/user?keys=16,18,20'
+```
+
+Response
+
+```json
+true
+```
+
+### Form GET Detail Data
+
+#### Request
+
+##### Query
+
+- `key` string (required). Key is extracted from selected row on table with data key of `<column key>` (see table specifications).
+
+#### Response
+
+Object where at least contains all keys from columns specifications. _Look at General Table diagram above_.
+
+#### Example
+
+URL `http://localhost:3000/user`
+
+Request
+
+```bash
+curl -X GET 'http://localhost:3000/user?key=16'
+```
+
+Response
+
+```json
+{
+  "id": 16,
+  "email": "andi@aa.aa",
+  "phone_number": "08121111111",
+  "nama": "Andi",
+  "type": "Regular",
+  "tanggal_lahir": "2020-01-09T17:00:00.000Z",
+  "alamat": "Bandung 999",
+  "created_at": "2025-03-20T23:45:33.444Z"
+}
+```
+
+### Form POST Create Data
+
+#### Request
+
+##### Headers
+
+- `Content-Type` → `application/json`
+
+##### Body
+
+- `<column key 1>` string/number/boolean/object (required). Key is defined on form data `<items>` specification. _Look at Form Data diagram above_.
+- `<column key 2>` string/number/boolean/object (required). Key is defined on form data `<items>` specification. _Look at Form Data diagram above_.
+- `<column key N>` string/number/boolean/object (required). Key is defined on form data `<items>` specification. _Look at Form Data diagram above_.
+
+#### Response
+
+Any response is accepted as long as returned HTTP code 200 (OK)
+
+#### Example
+
+URL `http://localhost:3000/user`
+
+Request
+
+```bash
+curl -X POST 'http://localhost:3000/user' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{"nama":"Didi","email":"didi@aa.aa","phone_number":"081233","type":"VIP","tanggal_lahir":"2020-02-02","alamat":"test"}'
+```
+
+Response
+
+```json
+{
+  "id": 22,
+  "email": "didi@aa.aa",
+  "phone_number": "081233",
+  "nama": "Didi",
+  "type": "VIP",
+  "tanggal_lahir": "2020-01-09T17:00:00.000Z",
+  "alamat": "test",
+  "created_at": "2025-03-20T23:45:33.444Z"
+}
+```
+
+### Form PUT Update Data
+
+#### Request
+
+##### Headers
+
+- `Content-Type` → `application/json`
+
+##### Query
+
+- `key` string (required). Key is extracted from selected row on table with data key of `<column key>` (see table specifications).
+
+##### Body
+
+- `<column key 1>` string/number/boolean/object (required). Key is defined on form data `<items>` specification. _Look at Form Data diagram above_.
+- `<column key 2>` string/number/boolean/object (required). Key is defined on form data `<items>` specification. _Look at Form Data diagram above_.
+- `<column key N>` string/number/boolean/object (required). Key is defined on form data `<items>` specification. _Look at Form Data diagram above_.
+
+#### Response
+
+Any response is accepted as long as returned HTTP code 200 (OK)
+
+#### Example
+
+URL `http://localhost:3000/user`
+
+Request
+
+```bash
+curl -X PUT 'http://localhost:3000/user?key=22' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{"nama":"Dedi","email":"didi@aa.aa","phone_number":"081233","type":"VIP","tanggal_lahir":"2020-02-02","alamat":"Jalan Jakarta"}'
+```
+
+Response
+
+```json
+{
+  "id": 22,
+  "email": "didi@aa.aa",
+  "phone_number": "081233",
+  "nama": "Dedi",
+  "type": "VIP",
+  "tanggal_lahir": "2020-01-09T17:00:00.000Z",
+  "alamat": "Jalan Jakarta",
+  "created_at": "2025-03-20T23:45:33.444Z"
+}
+```
