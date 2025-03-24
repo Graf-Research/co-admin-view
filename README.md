@@ -20,6 +20,10 @@ npm install --save co-admin-view
 
 ![](images/2.png)
 
+### Form Data
+
+![](images/3.png)
+
 ## Usage Example
 
 
@@ -58,15 +62,14 @@ export function Minimal() {
 ```
 
 ```tsx
-// lokasi import css mungkin berbeda-beda tergantung framework yang digunakan
-// pada NextJS, tambahkan import css di _app.tsx
-// pada Create React App tambahkan di file yang sama
 import 'co-admin-view/dist/index.css'
 
 import { CAInput, CAPage } from "co-admin-view";
 
 export function Preview() {
   const table: CAInput.TableStructure = {
+
+    // General
     title: 'List Order Data X',
     columns: [
       'id:ID',
@@ -78,19 +81,23 @@ export function Preview() {
       'alamat:Alamat'
     ],
     column_key: 'id',
-    search_query_key: 'q',
     urls: {
       get_url: 'http://localhost:3000/users',
       delete_url: 'http://localhost:3000/user'
     },
+
+    // Search & Filter
+    search_query_key: 'q',
     filters: [
-      'freetext:nama:nama:Nama Lengkap',
-      'select:type:type:User Type',
-      'select:fb:filter_b:F-B'
+      'freetext:nama:Nama Lengkap',
+      'select:type:User Type',
+      'select:fb:F-B'
     ],
     filter_options_data_source: [
       'type,fb@http://localhost:3000/user/types'
     ],
+
+    // Advanced Features
     request_init: {
       get: {
         headers: {
@@ -123,6 +130,8 @@ export function Preview() {
   };
 
   const form: CAInput.FormStructure = {
+    
+    // General
     title: 'User Data',
     items: [
       'Section A',
@@ -146,6 +155,8 @@ export function Preview() {
       create_new_url: 'http://localhost:3000/user',
       update_data_url: 'http://localhost:3000/user'
     },
+
+    // Advanced Features
     custom_view: {
       alamat(value: string, setValue: (value: string) => void) {
         return (

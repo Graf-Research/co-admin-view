@@ -7,7 +7,7 @@ export namespace CAInput {
   export type TableFilterQueryKey = string;
   export type TableFilterSourceKey = string;
   export type TableFilterLabel = string;
-  export type TableFilter = `${AvailableTableFilter}:${TableFilterQueryKey}:${TableFilterSourceKey}` | `${AvailableTableFilter}:${TableFilterQueryKey}:${TableFilterSourceKey}:${TableFilterLabel}`;
+  export type TableFilter = `${AvailableTableFilter}:${TableFilterQueryKey}` | `${AvailableTableFilter}:${TableFilterQueryKey}:${TableFilterLabel}`;
 
   export type FormItemSection = string;
   export type AvailableFormItemType = 'INPUT-TEXT' | 'INPUT-NUMBER' | 'TEXTAREA' | 'RADIO' | 'SELECT' | 'CHECKBOX' | 'CUSTOM';
@@ -71,7 +71,6 @@ export namespace CAOutput {
   export interface TableFilter {
     type: CAInput.AvailableTableFilter
     query_key: CAInput.TableFilterQueryKey
-    source_key: CAInput.TableFilterSourceKey
     label: CAInput.TableFilterLabel
   }
 

@@ -51,9 +51,9 @@ export function Preview() {
     },
     search_query_key: 'q',
     filters: [
-      'freetext:nama:nama:Nama Lengkap',
-      'select:type:type:User Type',
-      'select:fb:filter_b:F-B'
+      'freetext:nama:Nama Lengkap',
+      'select:type:User Type',
+      'select:fb:F-B'
     ],
     filter_options_data_source: [
       'type,fb@http://localhost:3000/user/types'
@@ -102,8 +102,8 @@ export function Preview() {
         'SELECT:type:type:Jenis',
         'INPUT-TEXT:tanggal_lahir:tanggal_lahir:Tanggal Lahir (YYYY-MM-DD)',
       ],
+      'Section B',
       'TEXTAREA:alamat:alamat:Alamat',
-      'INPUT-NUMBER:n:n:N',
     ],
     options_data_source: [
       'type@http://localhost:3000/user/types'

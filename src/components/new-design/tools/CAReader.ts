@@ -59,8 +59,8 @@ export class CAReader {
     const out: CAOutput.TableFilter[] = [];
     for (let i = 0; i < filters.length; i++) {
       const css = this.parseColon(filters[i]);
-      if (css.length < 3 || css.length > 4) {
-        throw new Error(`filter columns index ${i + 1} unexpected length ${css.length}, should be 3 or 4 colon string separated`);
+      if (css.length < 2 || css.length > 3) {
+        throw new Error(`filter columns index ${i + 1} unexpected length ${css.length}, should be 2 or 3 colon string separated`);
       }
       const type: CAInput.AvailableTableFilter = css[0] as CAInput.AvailableTableFilter;
       switch (type) {
@@ -71,14 +71,6 @@ export class CAReader {
         default:
           throw new Error(`filter columns index ${i + 1} filter type "${type}" is not available`);
       }
-      const source_key = css[2];
-
-      // Note: I am avoiding this feature, since filter key sometimes not included on table column keys
-      // -------
-      // const sk_column_index = columns.findIndex((c: CAOutput.TableColumn) => c.key == source_key);
-      // if (sk_column_index == -1) {
-      //   throw new Error(`filter columns index ${i + 1} source key "${source_key}" doesn't exist on table columns`);
-      // }
 
       const query_key = css[1];
       if (type === 'select' && !available_option_data_source_keys.includes(query_key)) {
@@ -93,8 +85,7 @@ export class CAReader {
       out.push({
         type,
         query_key,
-        source_key,
-        label: css[3] ?? query_key
+        label: css[2] ?? query_key
       });
     }
     return out;
