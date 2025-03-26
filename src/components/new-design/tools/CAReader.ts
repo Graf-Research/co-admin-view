@@ -105,9 +105,22 @@ export class CAReader {
       if (keys.length == 0) {
         throw new Error(`options data source index ${i + 1} "${data[i]}" invalid keys cannot be empty, should be <keys>@<url>`);
       }
+
+      let source_url = ass[1];
+      let option_map_label = 'label';
+      let option_map_value = 'value';
+      const custom_key_value_map = /^([^{]+)\{([\w\-]+)\:([\w\-]+)\}$/.exec(ass[1].trim());
+      if (custom_key_value_map) {
+        source_url = custom_key_value_map[1];
+        option_map_label = custom_key_value_map[2];
+        option_map_value = custom_key_value_map[3];
+      }
+
       out.push({
         query_keys: keys,
-        source_url: ass[1]
+        source_url,
+        option_map_label,
+        option_map_value
       });
     }
     return out;

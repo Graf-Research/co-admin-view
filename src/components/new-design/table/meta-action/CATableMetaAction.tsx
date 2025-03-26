@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CAInput, CAOutput } from "../../tools/types";
 import { CATableMetaFilter, FilterData, FilterOptionsData, OptionDataItem } from "./CATableMetaFilter";
+import { deepAccess } from "../../../utility";
 
 interface CATableMetaActionProps {
   structure: CAOutput.TableStructure
@@ -26,13 +27,20 @@ export function CATableMetaAction(props: CATableMetaActionProps) {
     }
     try {
       for (const option_data_source of props.structure.filter_options_data_source) {
-        const result = await fetch(option_data_source.source_url);
+        const result = await fetch(option_data_source.source_url, props.structure.request_init?.options_data?.[option_data_source.query_keys[0]]);
         if (result.ok) {
-          const json_value = await result.json();
+          const json_value: {[key: string]: any}[] = await result.json();
+          if (!Array.isArray(json_value)) {
+            props.setError(`wrong data source type, url ${option_data_source.source_url} expected to return type array`);
+            return;
+          }
           setFilterOptionsData({
             ...filter_options_data,
             ...option_data_source.query_keys.reduce((acc: FilterOptionsData, query_key: string) => {
-              acc[query_key] = json_value;
+              acc[query_key] = json_value.map((option_item: {[key: string]: any}) => ({
+                label: deepAccess(option_item, option_data_source.option_map_label),
+                value: deepAccess(option_item, option_data_source.option_map_value),
+              }));
               return acc;
             }, {})
           });

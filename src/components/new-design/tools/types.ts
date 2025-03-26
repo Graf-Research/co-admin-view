@@ -21,7 +21,9 @@ export namespace CAInput {
 
   export type CSVColumnKey = string;
   export type OptionsDataSourceURL = string;
-  export type OptionsDataSource = `${CSVColumnKey}@${OptionsDataSourceURL}`;
+  export type OptionsDataSourceOpMapLabel = string;
+  export type OptionsDataSourceOpMapValue = string;
+  export type OptionsDataSource = `${CSVColumnKey}@${OptionsDataSourceURL}` | `${CSVColumnKey}@${OptionsDataSourceURL}{${OptionsDataSourceOpMapLabel}:${OptionsDataSourceOpMapValue}}`;
 
   export interface TableStructure {
     title: string
@@ -51,11 +53,13 @@ export namespace CAInput {
       get_detail_url: string
       create_new_url: string
       update_data_url: string
+      options_data?: {[key: string]: RequestInit}
     }
     request_init?: {
       get?: RequestInit
       create?: RequestInit
       update?: RequestInit
+      options_data?: {[key: string]: RequestInit}
     }
     custom_view?: {[key: FormItemDataKey]: (value: any, setValue: (value: any) => void) => JSX.Element}
     allow_anonymous_data_key?: boolean
@@ -77,6 +81,8 @@ export namespace CAOutput {
   export interface OptionsDataSource {
     query_keys: string[]
     source_url: CAInput.OptionsDataSourceURL
+    option_map_label: string
+    option_map_value: string
   }
 
   export interface FieldFormItemCustom {
@@ -115,6 +121,7 @@ export namespace CAOutput {
       get?: RequestInit
       delete?: RequestInit
       export?: RequestInit
+      options_data?: {[key: string]: RequestInit}
     }
     custom_view?: {[key: string]: (value: any) => JSX.Element}
   }
@@ -133,6 +140,7 @@ export namespace CAOutput {
       get?: RequestInit
       create?: RequestInit
       update?: RequestInit
+      options_data?: {[key: string]: RequestInit}
     }
     allow_anonymous_data_key?: boolean
   }

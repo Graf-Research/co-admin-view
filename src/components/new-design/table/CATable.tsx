@@ -5,6 +5,7 @@ import { CAInput, CAOutput } from "../tools/types";
 import { CAReader } from "../tools/CAReader";
 import { CATableContextMenu } from "./context-menu/CATableContextMenu";
 import { FilterData } from "./meta-action/CATableMetaFilter";
+import { deepAccess } from "../../utility";
 
 interface CATableProps {
   refreshDataTrigger: Date
@@ -42,12 +43,12 @@ export function CATable(props: CATableProps) {
   const [active_context_menu_key, setActiveContextMenuKey] = useState<any | null>(null);
   const [fetch_params, setFetchParams] = useState<{[key: string]: any}>({});
   
-  const all_selected = data.data.reduce((acc: boolean, curr: Row) => acc && list_selected_key.includes(curr[out_structure.current!.column_key]), true);
+  const all_selected = data.data.reduce((acc: boolean, curr: Row) => acc && list_selected_key.includes(deepAccess(curr, out_structure.current!.column_key)), true);
   const with_delete_feature = Boolean(out_structure.current.urls.delete_url);
 
   function toggleSelectAll() {
     if (list_selected_key.length == 0 || !all_selected) {
-      setListSelectedKey(data.data.map(c => c[out_structure.current!.column_key]));
+      setListSelectedKey(data.data.map(c => deepAccess(c, out_structure.current!.column_key)));
     } else {
       setListSelectedKey([]);
     }
@@ -81,7 +82,7 @@ export function CATable(props: CATableProps) {
     setLoadingDeleteData(true);
     try {
       const delete_query = new URLSearchParams({ keys: list_selected_key.join(',') } as any).toString();
-      const res = await fetch(`${out_structure.current!.urls.delete_url}?${delete_query}`, { method: 'delete' });
+      const res = await fetch(`${out_structure.current!.urls.delete_url}?${delete_query}`, { method: 'delete', ...out_structure.current?.request_init?.delete });
 
       if (res.ok) {
         const fetch_data_query = new URLSearchParams({
@@ -154,9 +155,9 @@ export function CATable(props: CATableProps) {
                 {
                   with_delete_feature && <td>
                     <input 
-                      checked={list_selected_key.includes(row[out_structure.current!.column_key])}
+                      checked={list_selected_key.includes(deepAccess(row, out_structure.current!.column_key))}
                       onChange={() => {
-                        const pk = row[out_structure.current!.column_key];
+                        const pk = deepAccess(row, out_structure.current!.column_key);
                         if (list_selected_key.includes(pk)) {
                           setListSelectedKey(list_selected_key.filter(c => c !== pk));
                         } else {
@@ -169,12 +170,12 @@ export function CATable(props: CATableProps) {
                 {
                   out_structure.current!.columns.map((tc: CAOutput.TableColumn, j: number) => (
                     <td key={`${i}-${j}`}>
-                      { (loading_fetch_data || (list_selected_key.includes(row[out_structure.current!.column_key]) && loading_delete_data)) && <div className={'skeleton'} /> }
+                      { (loading_fetch_data || (list_selected_key.includes(deepAccess(row, out_structure.current!.column_key)) && loading_delete_data)) && <div className={'skeleton'} /> }
                       {
-                        (!loading_fetch_data && !(list_selected_key.includes(row[out_structure.current!.column_key]) && loading_delete_data)) && (
+                        (!loading_fetch_data && !(list_selected_key.includes(deepAccess(row, out_structure.current!.column_key)) && loading_delete_data)) && (
                           out_structure.current?.custom_view?.[tc.key]
-                          ? out_structure.current?.custom_view?.[tc.key](row[tc.key])
-                          : row[tc.key]
+                          ? out_structure.current?.custom_view?.[tc.key](deepAccess(row, tc.key))
+                          : deepAccess(row, tc.key)
                         )
                       }
                     </td>
@@ -185,11 +186,11 @@ export function CATable(props: CATableProps) {
                     <div className="context-menu">
                       <img 
                         onMouseUp={e => e.stopPropagation()}
-                        onClick={() => setActiveContextMenuKey(row[out_structure.current!.column_key] == active_context_menu_key ? null : row[out_structure.current!.column_key])}
+                        onClick={() => setActiveContextMenuKey(deepAccess(row, out_structure.current!.column_key) == active_context_menu_key ? null : deepAccess(row, out_structure.current!.column_key))}
                         className={'three-dots'}
                         src={'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IS0tIFVwbG9hZGVkIHRvOiBTVkcgUmVwbywgd3d3LnN2Z3JlcG8uY29tLCBHZW5lcmF0b3I6IFNWRyBSZXBvIE1peGVyIFRvb2xzIC0tPgo8c3ZnIHdpZHRoPSI4MDBweCIgaGVpZ2h0PSI4MDBweCIgdmlld0JveD0iMCAwIDE2IDE2IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9IiMwMDAwMDAiIGNsYXNzPSJiaSBiaS10aHJlZS1kb3RzLXZlcnRpY2FsIj4KICA8cGF0aCBkPSJNOS41IDEzYTEuNSAxLjUgMCAxIDEtMyAwIDEuNSAxLjUgMCAwIDEgMyAwem0wLTVhMS41IDEuNSAwIDEgMS0zIDAgMS41IDEuNSAwIDAgMSAzIDB6bTAtNWExLjUgMS41IDAgMSAxLTMgMCAxLjUgMS41IDAgMCAxIDMgMHoiLz4KPC9zdmc+'} />
-                      { row[out_structure.current!.column_key] == active_context_menu_key && <CATableContextMenu
-                        onEdit={() => props.onEdit!(row[out_structure.current!.column_key])} 
+                      { deepAccess(row, out_structure.current!.column_key) == active_context_menu_key && <CATableContextMenu
+                        onEdit={() => props.onEdit!(deepAccess(row, out_structure.current!.column_key))} 
                         onClose={() => setActiveContextMenuKey(null)} /> }
                     </div>
                   </td>

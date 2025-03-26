@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { CAInput, CAOutput } from "../tools/types";
 import { CAReader } from "../tools/CAReader";
 import { ActiveForm } from "../page/types";
+import { deepAccess } from "../../utility";
 
 interface CAFormProps {
   activeForm: ActiveForm
@@ -169,6 +170,9 @@ export function CAForm(props: CAFormProps) {
             <select 
               value={form_data[l0_item.data_key] ?? ''}
               onChange={e => setFormData({ ...form_data, [l0_item.data_key]: e.target.value })}>
+              <option value={''} selected>
+                Choose { l0_item.label }
+              </option>
               {
                 options_data[l0_item.data_key]?.map((o: OptionDataItem, i: number) => (
                   <option
@@ -181,8 +185,21 @@ export function CAForm(props: CAFormProps) {
             </select>
           </div>
         );
-      case "RADIO":
       case "CHECKBOX":
+        return (
+          <div 
+            key={key}
+            className={'input-container'}>
+            <label>
+              { l0_item.label }
+            </label>
+            <input 
+              type={'checkbox'}
+              checked={form_data[l0_item.data_key] ?? ''}
+              onChange={e => setFormData({ ...form_data, [l0_item.data_key]: e.target.checked })} />
+          </div>
+        );
+      case "RADIO":
       default:
         return (
           <div
@@ -200,7 +217,7 @@ export function CAForm(props: CAFormProps) {
       if (result.ok) {
         const json_value = await result.json();
         setFormData(out_structure.current!.form_items.reduce((acc: FormData, curr: (CAOutput.FieldFormItem | CAOutput.FieldFormItemCustom)) => {
-          acc[curr.data_key] = json_value[curr.source_key];
+          acc[curr.data_key] = deepAccess(json_value, curr.source_key);
           return acc;
         }, {}));
         setError(null);
@@ -219,21 +236,31 @@ export function CAForm(props: CAFormProps) {
       return;
     }
     try {
+      let option_data_accumulator = {};
       for (const option_data_source of out_structure.current.options_data_source) {
-        const result = await fetch(option_data_source.source_url);
+        const result = await fetch(option_data_source.source_url, out_structure.current.request_init?.options_data?.[option_data_source.query_keys[0]]);
         if (result.ok) {
-          const json_value = await result.json();
-          setOptionsData({
-            ...options_data,
+          const json_value: {[key: string]: any}[] = await result.json();
+          if (!Array.isArray(json_value)) {
+            setError(`wrong data source type, url ${option_data_source.source_url} expected to return type array`);
+            return;
+          }
+          option_data_accumulator = {
+            ...option_data_accumulator,
             ...option_data_source.query_keys.reduce((acc: {[key: string]: OptionDataItem[]}, query_key: string) => {
-              acc[query_key] = json_value;
+              acc[query_key] = json_value.map((option_item: {[key: string]: any}) => ({
+                label: deepAccess(option_item, option_data_source.option_map_label),
+                value: deepAccess(option_item, option_data_source.option_map_value),
+              }));
               return acc;
             }, {})
-          });
+          }
         } else {
           setError(await result.text());
         }
       }
+
+      setOptionsData(option_data_accumulator);
     } catch (err: any) {
       setError(err.toString());
     }
