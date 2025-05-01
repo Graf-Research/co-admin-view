@@ -1,29 +1,48 @@
 export namespace CAInput {
   export type TableColumnKey = string;
   export type TableColumnLabel = string;
-  export type TableColumn = `${TableColumnKey}` | `${TableColumnKey}:${TableColumnLabel}`;
+  export type TableColumn = `${TableColumnKey}`
+    | `${TableColumnKey}:${TableColumnLabel}`;
 
-  export type AvailableTableFilter = 'freetext' | 'checkbox' | 'select'
+  export type AvailableTableFilter = 'freetext'
+    | 'checkbox'
+    | 'select'
   export type TableFilterQueryKey = string;
   export type TableFilterSourceKey = string;
   export type TableFilterLabel = string;
-  export type TableFilter = `${AvailableTableFilter}:${TableFilterQueryKey}` | `${AvailableTableFilter}:${TableFilterQueryKey}:${TableFilterLabel}`;
+  export type TableFilter = `${AvailableTableFilter}:${TableFilterQueryKey}`
+    | `${AvailableTableFilter}:${TableFilterQueryKey}:${TableFilterLabel}`;
 
   export type FormItemSection = string;
-  export type AvailableFormItemType = 'INPUT-TEXT' | 'INPUT-NUMBER' | 'TEXTAREA' | 'RADIO' | 'SELECT' | 'CHECKBOX' | 'CUSTOM';
+  export type AvailableFormItemType = 'INPUT-TEXT'
+    | 'INPUT-NUMBER'
+    | 'TEXTAREA'
+    | 'RADIO'
+    | 'SELECT'
+    | 'CHECKBOX'
+    | 'CUSTOM';
   export type FormItemDataKey = string;
   export type FormItemSourceKey = string;
   export type FormItemLabel = string;
-  export type L0_FormItem = FormItemSection | `${AvailableFormItemType}:${FormItemDataKey}:${FormItemSourceKey}` | `${AvailableFormItemType}:${FormItemDataKey}:${FormItemSourceKey}:${FormItemLabel}`;
-  export type L1_FormItem = L0_FormItem | L0_FormItem[];
-  export type L2_FormItem = L0_FormItem | L1_FormItem | L1_FormItem[];
+  export type L0_FormItem = FormItemSection
+    | `${AvailableFormItemType}:${FormItemDataKey}:${FormItemSourceKey}`
+    | `${AvailableFormItemType}:${FormItemDataKey}:${FormItemSourceKey}:${FormItemLabel}`
+    | `${AvailableFormItemType}:${FormItemDataKey}:${FormItemSourceKey}:${FormItemLabel}`;
+  export type L1_FormItem = L0_FormItem
+    | L0_FormItem[];
+  export type L2_FormItem = L0_FormItem
+    | L1_FormItem
+    | L1_FormItem[];
   export type FormItem = L2_FormItem;
 
   export type CSVColumnKey = string;
   export type OptionsDataSourceURL = string;
   export type OptionsDataSourceOpMapLabel = string;
   export type OptionsDataSourceOpMapValue = string;
-  export type OptionsDataSource = `${CSVColumnKey}@${OptionsDataSourceURL}` | `${CSVColumnKey}@${OptionsDataSourceURL}{${OptionsDataSourceOpMapLabel}:${OptionsDataSourceOpMapValue}}`;
+  export type OptionsDataSourceDependencyKeysCSV = string;
+  export type OptionsDataSource = `${CSVColumnKey}@${OptionsDataSourceURL}`
+    | `${CSVColumnKey}@${OptionsDataSourceURL}{${OptionsDataSourceOpMapLabel}:${OptionsDataSourceOpMapValue}}`
+    | `${CSVColumnKey}@${OptionsDataSourceURL}{${OptionsDataSourceOpMapLabel}:${OptionsDataSourceOpMapValue}:?${OptionsDataSourceDependencyKeysCSV}}`;
 
   export interface TableStructure {
     title: string
@@ -83,6 +102,7 @@ export namespace CAOutput {
     source_url: CAInput.OptionsDataSourceURL
     option_map_label: string
     option_map_value: string
+    list_key_dependency: string[]
   }
 
   export interface FieldFormItemCustom {
@@ -100,9 +120,14 @@ export namespace CAOutput {
     label: CAInput.FormItemLabel
   }
 
-  export type L0_FormItem = CAInput.FormItemSection | FieldFormItem | FieldFormItemCustom;
-  export type L1_FormItem = L0_FormItem | L0_FormItem[];
-  export type L2_FormItem = L0_FormItem | L1_FormItem | L1_FormItem[];
+  export type L0_FormItem = CAInput.FormItemSection
+    | FieldFormItem
+    | FieldFormItemCustom;
+  export type L1_FormItem = L0_FormItem
+    | L0_FormItem[];
+  export type L2_FormItem = L0_FormItem
+    | L1_FormItem
+    | L1_FormItem[];
   export type FormItem = L2_FormItem;
 
   export interface TableStructure {

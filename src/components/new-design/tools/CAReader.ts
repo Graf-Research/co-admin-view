@@ -109,18 +109,21 @@ export class CAReader {
       let source_url = ass[1];
       let option_map_label = 'label';
       let option_map_value = 'value';
-      const custom_key_value_map = /^([^{]+)\{([\w\-]+)\:([\w\-]+)\}$/.exec(ass[1].trim());
+      let list_key_dependency: string[] = [];
+      const custom_key_value_map = /^([^{]+)\{([\w\-]+)\:([\w\-]+)(\:\?[\w\,]+)?\}$/.exec(ass[1].trim());
       if (custom_key_value_map) {
         source_url = custom_key_value_map[1];
         option_map_label = custom_key_value_map[2];
         option_map_value = custom_key_value_map[3];
+        list_key_dependency = custom_key_value_map[4] ? this.parseComma(custom_key_value_map[4].slice(2)) : [];
       }
 
       out.push({
         query_keys: keys,
         source_url,
         option_map_label,
-        option_map_value
+        option_map_value,
+        list_key_dependency
       });
     }
     return out;
@@ -155,7 +158,7 @@ export class CAReader {
         continue;
       }
 
-      if (css.length < 3 || css.length > 4) {
+      if (css.length < 3 || css.length > 5) {
         throw new Error(`form items index ${i + 1} unexpected length ${css.length}, should be 3 or 4 colon string separated`);
       }
 
@@ -190,7 +193,6 @@ export class CAReader {
       if (duplicate_data_key_index != -1) {
         throw new Error(`form items index ${i + 1} filter query key "${data_key}" duplicated, already exist on index ${duplicate_data_key_index}`);
       }
-
 
       if (type === 'CUSTOM') {
         if (!form_structure.custom_view) {

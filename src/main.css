@@ -81,6 +81,7 @@
 }
 
 .co-admin .table-container table thead th {
+  white-space: nowrap;
   padding-top: 8px;
   padding-bottom: 8px;
   font-weight: 600;

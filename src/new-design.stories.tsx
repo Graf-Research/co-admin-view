@@ -32,32 +32,22 @@ export function Minimal() {
   );
 }
 
-export function Preview() {
+export function SampleProduk() {
   const table: CAInput.TableStructure = {
     title: 'List Order Data X',
     columns: [
       'id:ID',
-      'nama:Nama',
-      'email:Email',
-      'type:Jenis',
-      // 'phone_number:Nomor HP',
-      // 'tanggal_lahir:Tgl. Lahir',
-      // 'alamat:Alamat'
+      'name:Nama Produk',
+      'description:Deskripsi',
+      'id_province:ID Provinsi',
+      'id_city:ID City'
     ],
     column_key: 'id',
     urls: {
-      get_url: 'http://localhost:3000/users',
-      delete_url: 'http://localhost:3000/user'
+      get_url: 'http://localhost:3008/product',
+      delete_url: 'http://localhost:3008/product'
     },
     search_query_key: 'q',
-    filters: [
-      'freetext:nama:Nama Lengkap',
-      'select:type:User Type',
-      'select:fb:F-B'
-    ],
-    filter_options_data_source: [
-      'type,fb@http://localhost:3000/user/types'
-    ],
     request_init: {
       get: {
         headers: {
@@ -66,24 +56,9 @@ export function Preview() {
       }
     },
     custom_view: {
-      nama(value: string) {
+      name(value: string) {
         return (
           <div style={{ fontWeight: 'bold' }}>{ value }</div>
-        );
-      },
-      type(value: string) {
-        return (
-          <div style={{ display: 'flex' }}>
-            <div 
-              style={{
-                borderRadius: 8,
-                padding: '6px 12px',
-                background: '#AAA',
-                color: 'white'
-              }}>
-              { value }
-            </div>
-          </div>
         );
       }
     }
@@ -92,36 +67,23 @@ export function Preview() {
   const form: CAInput.FormStructure = {
     title: 'User Data',
     items: [
-      'Section A',
-      'INPUT-TEXT:nama:nama:Nama',
+      'Data',
+      'INPUT-TEXT:name:name:Nama',
+      'TEXTAREA:description:description:Deskripsi',
+      'Lokasi',
       [
-        'INPUT-TEXT:email:email:Email',
-        'INPUT-TEXT:phone_number:phone_number:Nomor HP',
+        'SELECT:id_province:id_province:Provinsi',
+        'SELECT:id_city:id_city:Kota/Kabupaten',
       ],
-      [
-        'SELECT:type:type:Jenis',
-        'INPUT-TEXT:tanggal_lahir:tanggal_lahir:Tanggal Lahir (YYYY-MM-DD)',
-      ],
-      'Section B',
-      'TEXTAREA:alamat:alamat:Alamat',
     ],
     options_data_source: [
-      'type@http://localhost:3000/user/types'
+      'id_province@http://localhost:3008/province{name:id}',
+      'id_city@http://localhost:3008/city{name:id:?id_province}'
     ],
     urls: {
-      get_detail_url: 'http://localhost:3000/user',
-      create_new_url: 'http://localhost:3000/user',
-      update_data_url: 'http://localhost:3000/user'
-    },
-    custom_view: {
-      alamat(value: string, setValue: (value: string) => void) {
-        return (
-          <textarea
-            style={{ outline: 'none' }}
-            value={value}
-            onChange={e => setValue(e.target.value)} />
-        );
-      }
+      get_detail_url: 'http://localhost:3008/product-detail',
+      create_new_url: 'http://localhost:3008/product',
+      update_data_url: 'http://localhost:3008/product'
     },
     allow_anonymous_data_key: true
   };

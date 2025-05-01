@@ -22,11 +22,20 @@ interface OptionDataItem {
 
 export function CAForm(props: CAFormProps) {
   const out_structure = useRef<CAOutput.FormStructure>();
+  const list_watch_options_key = useRef<CAOutput.OptionsDataSource[]>([]);
+  const map_watch_options_old_value = useRef<{[key: string]: any}>({});
   if (!out_structure.current) {
     try {
       const reader = new CAReader();
       const table_structure = reader.getTableStructure(props.structure.table);
       out_structure.current = reader.getFormStructure(table_structure, props.structure.form);
+      list_watch_options_key.current = out_structure.current.options_data_source?.filter(o => o.list_key_dependency.length > 0) ?? [];
+      for (const option of list_watch_options_key.current) {
+        for (const key of option.list_key_dependency) {
+          map_watch_options_old_value.current[key] = '';
+        }
+      }
+      console.log(out_structure)
     } catch (err: any) {
       return (
         <div className="table-container" style={{ background: '#FFEDD5' }}>
@@ -238,7 +247,8 @@ export function CAForm(props: CAFormProps) {
     try {
       let option_data_accumulator = {};
       for (const option_data_source of out_structure.current.options_data_source) {
-        const result = await fetch(option_data_source.source_url, out_structure.current.request_init?.options_data?.[option_data_source.query_keys[0]]);
+        const request_init_options = out_structure.current.request_init?.options_data?.[option_data_source.query_keys[0]];
+        const result = await fetch(option_data_source.source_url, request_init_options);
         if (result.ok) {
           const json_value: {[key: string]: any}[] = await result.json();
           if (!Array.isArray(json_value)) {
@@ -277,6 +287,47 @@ export function CAForm(props: CAFormProps) {
       }
     }
   }, [props.activeForm]);
+
+  async function getOptionData(option: CAOutput.OptionsDataSource, url_params: URLSearchParams) {
+    const request_init_options = out_structure.current?.request_init?.options_data?.[option.query_keys[0]];
+    const result = await fetch(`${option.source_url}?${url_params.toString()}`, request_init_options);
+    if (result.ok) {
+      const json_value: {[key: string]: any}[] = await result.json();
+      if (!Array.isArray(json_value)) {
+        setError(`wrong data source type, url ${option.source_url} expected to return type array`);
+        return;
+      }
+      setOptionsData(old => ({
+        ...old,
+        ...option.query_keys.reduce((acc: {[key: string]: OptionDataItem[]}, query_key: string) => {
+          acc[query_key] = json_value.map((option_item: {[key: string]: any}) => ({
+            label: deepAccess(option_item, option.option_map_label),
+            value: deepAccess(option_item, option.option_map_value),
+          }));
+          return acc;
+        }, {})
+      }));
+    } else {
+      setError(await result.text());
+    }
+  }
+
+  useEffect(() => {
+    for (const option of list_watch_options_key.current) {
+      for (const key of option.list_key_dependency) {
+        if (form_data[key] != map_watch_options_old_value.current[key]) {
+          map_watch_options_old_value.current[key] = form_data[key];
+          const sp = new URLSearchParams();
+          sp.set(key, form_data[key]);
+          getOptionData(option, sp);
+        }
+      }
+    }
+  }, [form_data]);
+
+  useEffect(() => {
+    console.log(options_data)
+  }, [options_data])
 
   return (
     <div className={'form-container'}>
